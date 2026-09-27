@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Xavier Debate Circle - Official debate and public speaking organization of Xavier University since 1996." />
+  <title>Xavier Debate Circle | Stand and Deliver • Est. 1996</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            xdc: {
+              royal: '#08206B',
+              royalHover: '#0D2D8C',
+              royalLight: '#EEF2FF',
+              gold: '#C4922A',
+              goldSoft: '#FDF8EE',
+              slateBg: '#F8FAFC'
+            }
+          },
+          fontFamily: {
+            constantia: ['Constantia', 'Palatino Linotype', 'Book Antiqua', 'Georgia', 'serif']
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    @font-face {
+      font-family: 'Constantia';
+      src: local('Constantia'), local('Constantia Regular'), local('Palatino Linotype'), local('Georgia');
+      font-weight: 400;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Constantia';
+      src: local('Constantia Bold'), local('Constantia-Bold'), local('Palatino Linotype Bold'), local('Georgia Bold');
+      font-weight: 700;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Constantia';
+      src: local('Constantia Italic'), local('Constantia-Italic'), local('Palatino Linotype Italic'), local('Georgia Italic');
+      font-weight: 400;
+      font-style: italic;
+    }
+    *, html, body, h1, h2, h3, h4, h5, h6, p, span, a, button, input, select, textarea, table, th, td, label, code {
+      font-family: 'Constantia', 'Palatino Linotype', 'Book Antiqua', Georgia, serif !important;
+    }
+    body {
+      background-color: #FFFFFF;
+      color: #0F172A;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    .gold-top-border {
+      border-top: 3px solid #C4922A;
+    }
+    .royal-top-border {
+      border-top: 3px solid #08206B;
+    }
+    .card-photo-zoom:hover .achievement-img {
+      transform: scale(1.04);
+    }
+    /* Skip to main content link */
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      background: #08206B;
+      color: white;
+      padding: 8px;
+      text-decoration: none;
+      z-index: 100;
+    }
+    .skip-link:focus {
+      top: 0;
+    }
+    /* Improve focus visibility */
+    *:focus-visible {
+      outline: 2px solid #08206B;
+      outline-offset: 2px;
+    }
+    /* Better button contrast */
+    button, a[role="button"] {
+      position: relative;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex flex-col bg-white text-slate-900 selection:bg-xdc-gold/20 selection:text-xdc-royal">
+  <!-- Skip to main content link for accessibility -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Background watermark -->
+  <div aria-hidden="true" class="fixed inset-0 pointer-events-none z-0 overflow-hidden select-none">
+    <div class="absolute -right-40 sm:-right-52 lg:-right-64 top-10 w-[580px] sm:w-[760px] lg:w-[940px] opacity-[0.04] will-change-transform transition-transform duration-75 ease-out">
+      <!-- Placeholder for shield SVG -->
+      <svg viewBox="0 0 200 240" class="w-full h-full">
+        <path d="M100 20 L170 50 L170 130 Q100 180 100 180 Q30 130 30 50 Z" fill="currentColor" stroke="currentColor" stroke-width="2"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Main Navigation Header -->
+  <header class="sticky top-0 bg-white/95 backdrop-blur-sm border-b border-slate-200 relative z-40 shadow-sm">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <!-- Logo & Brand -->
+      <a href="/" class="flex items-center gap-2.5 group hover:opacity-80 transition-opacity" aria-label="Xavier Debate Circle home">
+        <div class="w-9 h-10 flex items-center justify-center shrink-0">
+          <svg viewBox="0 0 200 240" class="w-full h-full" fill="#08206B">
+            <path d="M100 20 L170 50 L170 130 Q100 180 100 180 Q30 130 30 50 Z" stroke="#C4922A" stroke-width="2"/>
+          </svg>
+        </div>
+        <span class="text-base font-bold text-xdc-royal tracking-widest group-hover:text-xdc-royalHover transition-colors">
+          Xavier Debate Circle
+        </span>
+      </a>
+
+      <!-- Navigation Links -->
+      <nav id="main-nav" class="hidden sm:flex items-center gap-6 text-sm font-bold text-slate-600">
+        <a href="#about" class="hover:text-xdc-royal transition-colors focus:outline-none focus:underline">About</a>
+        <a href="#purpose" class="hover:text-xdc-royal transition-colors focus:outline-none focus:underline">Purpose</a>
+        <a href="#hall-of-fame" class="hover:text-xdc-royal transition-colors focus:outline-none focus:underline">Hall of Fame</a>
+        <a href="/portal.html" class="px-4 py-1.5 rounded-lg bg-xdc-royal text-white hover:bg-xdc-royalHover transition-colors text-xs uppercase tracking-wider shadow-sm focus:outline-none">
+          Portal
+        </a>
+      </nav>
+
+      <!-- Mobile menu button -->
+      <button 
+        id="mobile-menu-btn" 
+        class="sm:hidden p-2 rounded hover:bg-slate-100 focus:outline-none"
+        aria-label="Toggle navigation menu"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile Navigation Menu -->
+    <nav id="mobile-menu" class="hidden sm:hidden border-t border-slate-200 bg-white">
+      <div class="px-4 py-3 space-y-2">
+        <a href="#about" class="block px-3 py-2 rounded hover:bg-xdc-slateBg text-sm font-bold text-xdc-royal">About</a>
+        <a href="#purpose" class="block px-3 py-2 rounded hover:bg-xdc-slateBg text-sm font-bold text-xdc-royal">Purpose</a>
+        <a href="#hall-of-fame" class="block px-3 py-2 rounded hover:bg-xdc-slateBg text-sm font-bold text-xdc-royal">Hall of Fame</a>
+        <a href="/portal.html" class="block px-3 py-2 rounded bg-xdc-royal text-white text-sm font-bold text-center">Portal</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Notifications -->
+  <div id="notification-stack" class="fixed top-20 right-4 z-50 flex flex-col gap-2.5 max-w-sm w-full pointer-events-none px-2 sm:px-0"></div>
+
+  <!-- Main Content -->
+  <main id="main-content" class="flex-grow relative z-10">
+
+    <!-- SECTION 1: About XDC -->
+    <section id="about" class="bg-white py-16 sm:py-20 border-b border-slate-200/80">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 flex flex-col items-center text-center">
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-8 mb-8">
+          <div class="w-36 h-40 sm:w-44 sm:h-48 shrink-0 flex items-center justify-center">
+            <svg viewBox="0 0 200 240" class="w-full h-full drop-shadow-sm" fill="#08206B">
+              <path d="M100 20 L170 50 L170 130 Q100 180 100 180 Q30 130 30 50 Z" stroke="#C4922A" stroke-width="2"/>
+              <text x="100" y="100" text-anchor="middle" font-size="48" fill="#C4922A" font-weight="bold">XDC</text>
+            </svg>
+          </div>
+
+          <div class="text-center sm:text-left">
+            <div class="text-xs font-bold uppercase tracking-widest text-xdc-gold mb-2">
+              30 Years of Transcending Limits
+            </div>
+            <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-xdc-royal tracking-wider leading-none mb-3">
+              Xavier Debate Circle
+            </h1>
+            <p class="text-lg sm:text-2xl font-bold text-xdc-gold tracking-wide">
+              <span class="italic">Stand and Deliver</span> • Est. 1996
+            </p>
+          </div>
+        </div>
+
+        <p class="text-base sm:text-lg text-slate-700 max-w-3xl leading-relaxed">
+          Founded in 1996, the <strong class="text-xdc-royal">Xavier Debate Circle</strong> is the official debate and public speaking organization of <strong class="text-xdc-royal">Xavier University</strong>. For three decades, we have cultivated intellectual excellence, fearless discourse, and transformative leadership among Atenean debaters and advocates.
+        </p>
+      </div>
+    </section>
+
+    <!-- SECTION 2: Purpose & Vision -->
+    <section id="purpose" class="py-14 sm:py-16 bg-xdc-slateBg/50 border-b border-slate-200">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6">
+        <h2 class="text-3xl sm:text-4xl font-bold text-xdc-royal text-center mb-8">
+          Purpose &amp; Vision
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+          <!-- Mission Card -->
+          <div class="p-7 sm:p-8 rounded-xl bg-white border border-slate-200 gold-top-border shadow-sm">
+            <h3 class="text-2xl font-bold uppercase tracking-widest text-xdc-gold mb-3">
+              Mission
+            </h3>
+            <p class="text-sm sm:text-base text-slate-700 leading-relaxed">
+              The Xavier Debate Circle is dedicated to advancing international debating standards among Xavier University students. By cultivating open-minded, critically sharp, and socially aware debaters, we foster a culture of rigorous argumentation, ethical discourse, and intellectual courage.
+            </p>
+          </div>
+
+          <!-- Vision Card -->
+          <div class="p-7 sm:p-8 rounded-xl bg-white border border-slate-200 royal-top-border shadow-sm">
+            <h3 class="text-2xl font-bold uppercase tracking-widest text-xdc-gold mb-3">
+              Vision
+            </h3>
+            <p class="text-sm sm:text-base text-slate-700 leading-relaxed">
+              We envision ourselves as a premier bastion of intellectual excellence and fearless discourse—a transformative arena where Atenean minds are forged through competitive debate, community leadership, and the relentless pursuit of truth.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: Hall of Fame -->
+    <section id="hall-of-fame" class="py-14 sm:py-16 bg-white border-b border-slate-200">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4 mb-8">
+          <div>
+            <h2 class="text-3xl sm:text-4xl font-bold text-xdc-royal">
+              Hall of Fame
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-600 mt-2">
+              Celebrating championship performances and legendary debaters
+            </p>
+          </div>
+
+          <div class="flex flex-wrap gap-2">
+            <input
+              type="text"
+              id="hof-search-input"
+              placeholder="Search debater or tournament..."
+              aria-label="Search hall of fame"
+              class="px-4 py-2 rounded-lg bg-white border border-slate-300 text-sm text-slate-800 focus:outline-none focus:border-xdc-royal focus:ring-2 focus:ring-xdc-gold/30"
+            />
+          </div>
+        </div>
+
+        <!-- Filter Tags -->
+        <div id="hof-filters" class="flex flex-wrap gap-2 mb-8">
+          <!-- Dynamically populated -->
+        </div>
+
+        <!-- Hall of Fame Grid -->
+        <div id="hof-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Dynamically populated -->
+        </div>
+
+        <div id="hof-empty-state" class="text-center py-12">
+          <p class="text-slate-600 text-sm">Hall of Fame entries will be displayed here.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-xdc-royal text-white py-8 mt-16 border-t border-xdc-gold">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 text-center text-sm">
+      <p class="mb-2">&copy; 2024 Xavier Debate Circle. All rights reserved.</p>
+      <p class="text-xdc-gold font-bold italic">Stand and Deliver • Est. 1996</p>
+    </div>
+  </footer>
+
+  <script src="/js/public.js"></script>
+</body>
+</html>
