@@ -1,0 +1,4247 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Xavier Debate Circle | Stand and Deliver • Est. 1996</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            xdc: {
+              royal: '#08206B',
+              royalHover: '#0D2D8C',
+              royalLight: '#EEF2FF',
+              gold: '#C4922A',
+              goldSoft: '#FDF8EE',
+              slateBg: '#F8FAFC'
+            }
+          },
+          fontFamily: {
+            constantia: ['Constantia', 'Palatino Linotype', 'Book Antiqua', 'Georgia', 'serif']
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    @font-face {
+      font-family: 'Constantia';
+      src: local('Constantia'), local('Constantia Regular'), local('Palatino Linotype'), local('Georgia');
+      font-weight: 400;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Constantia';
+      src: local('Constantia Bold'), local('Constantia-Bold'), local('Palatino Linotype Bold'), local('Georgia Bold');
+      font-weight: 700;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Constantia';
+      src: local('Constantia Italic'), local('Constantia-Italic'), local('Palatino Linotype Italic'), local('Georgia Italic');
+      font-weight: 400;
+      font-style: italic;
+    }
+    *, html, body, h1, h2, h3, h4, h5, h6, p, span, a, button, input, select, textarea, table, th, td, label, code {
+      font-family: 'Constantia', 'Palatino Linotype', 'Book Antiqua', Georgia, serif !important;
+    }
+    body {
+      background-color: #FFFFFF;
+      color: #0F172A;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    .gold-top-border {
+      border-top: 3px solid #C4922A;
+    }
+    .royal-top-border {
+      border-top: 3px solid #08206B;
+    }
+    .card-photo-zoom:hover .achievement-img {
+      transform: scale(1.04);
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex flex-col bg-white text-slate-900 selection:bg-xdc-gold/20 selection:text-xdc-royal relative">
+
+  <!-- ===================================================================== -->
+  <!-- FADED SIDE-PROFILE BACKGROUND LOGO WATERMARK (PARALLAX ON SCROLL)     -->
+  <!-- ===================================================================== -->
+  <div
+    aria-hidden="true"
+    class="fixed inset-0 pointer-events-none z-0 overflow-hidden select-none"
+  >
+    <div
+      id="parallax-side-crest"
+      class="absolute -right-40 sm:-right-52 lg:-right-64 top-10 w-[580px] sm:w-[760px] lg:w-[940px] opacity-[0.04] will-change-transform transition-transform duration-75 ease-out"
+      data-xdc-logo="shield"
+    ></div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- FLOATING PREVIEW ROLE SWITCHER BAR (TOP BAR, Z-50)                    -->
+  <!-- ===================================================================== -->
+  <div id="preview-role-bar" class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-12 flex items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-xdc-gold"></span>
+        <span class="text-[11px] sm:text-xs font-bold uppercase tracking-widest text-xdc-royal">
+          Preview Role Switcher
+        </span>
+      </div>
+
+      <!-- Three Role Buttons: Public View, Member View, Officer View -->
+      <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-lg border border-slate-200">
+        <button
+          type="button"
+          onclick="switchRole('public')"
+          id="role-btn-public"
+          class="px-3 py-1 rounded-md text-xs font-bold transition-all"
+        >
+          Public View
+        </button>
+        <button
+          type="button"
+          onclick="switchRole('member')"
+          id="role-btn-member"
+          class="px-3 py-1 rounded-md text-xs font-bold transition-all"
+        >
+          Member View
+        </button>
+        <button
+          type="button"
+          onclick="switchRole('officer')"
+          id="role-btn-officer"
+          class="px-3 py-1 rounded-md text-xs font-bold transition-all"
+        >
+          Officer View
+        </button>
+      </div>
+
+      <!-- Preview Bar Right Controls: Test Credentials Helper + Active Session Switcher -->
+      <div class="flex items-center gap-2 text-xs">
+        <!-- Coder-Only Security Console Jump Button (Strictly hidden unless logged in as albert.melodia@gmail.com) -->
+        <button
+          type="button"
+          id="coder-root-topbar-btn"
+          onclick="scrollToCoderConsole()"
+          class="hidden px-2.5 py-1 rounded-md bg-xdc-royal text-white border border-xdc-gold font-bold text-[11px] hover:bg-xdc-royalHover transition-colors"
+        >
+          🛡️ Coder Security Audit (<span id="audit-log-count-badge">1</span>)
+        </button>
+
+        <button
+          type="button"
+          onclick="toggleTestAccountsModal()"
+          class="px-2.5 py-1 rounded-md bg-xdc-goldSoft text-xdc-royal border border-xdc-gold/40 font-bold text-[11px] hover:bg-xdc-gold hover:text-white transition-colors"
+        >
+          🔑 Gmail Test Accounts
+        </button>
+
+        <div id="preview-member-picker-wrap" class="hidden lg:flex items-center gap-1.5 text-xs">
+          <label for="preview-member-select" class="text-slate-500">Session:</label>
+          <select
+            id="preview-member-select"
+            onchange="changeActiveMember(this.value)"
+            class="bg-white border border-slate-300 text-xdc-royal font-bold rounded-md px-2 py-1 text-xs focus:outline-none focus:border-xdc-royal"
+          ></select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MAIN NAVIGATION HEADER                                                -->
+  <!-- ===================================================================== -->
+  <header class="pt-12 bg-white/90 backdrop-blur-sm border-b border-slate-200 relative z-10">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <!-- Minimalist Brand Mark -->
+      <div class="flex items-center gap-2.5 cursor-pointer group" onclick="switchRole('public')">
+        <div class="w-9 h-10 flex items-center justify-center shrink-0" data-xdc-logo="shield"></div>
+        <span class="text-base font-bold text-xdc-royal tracking-widest group-hover:text-xdc-royalHover transition-colors">
+          Xavier Debate Circle
+        </span>
+      </div>
+
+      <!-- Public Navigation Links Following the Exact 4-Part Sequence -->
+      <nav id="public-nav-links" class="hidden sm:flex items-center gap-6 text-sm font-bold text-slate-600">
+        <a href="#about" class="hover:text-xdc-royal transition-colors">About</a>
+        <a href="#purpose-horizon" class="hover:text-xdc-royal transition-colors">Purpose &amp; Horizon</a>
+        <a href="#hall-of-fame" class="hover:text-xdc-royal transition-colors">Hall of Fame</a>
+        <a href="#portal-login" class="px-4 py-1.5 rounded-lg bg-xdc-royal text-white hover:bg-xdc-royalHover transition-colors text-xs uppercase tracking-wider shadow-sm">
+          Portal Login
+        </a>
+      </nav>
+
+      <!-- Logged-in Portal Actions -->
+      <div id="logged-in-nav-actions" class="hidden items-center gap-3">
+        <span id="active-role-pill" class="px-3 py-1 rounded-full text-xs font-bold bg-xdc-goldSoft text-xdc-royal border border-xdc-gold/40"></span>
+        <button
+          type="button"
+          onclick="handleSignOut()"
+          class="px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-bold text-slate-700 hover:text-xdc-royal hover:border-xdc-royal transition-colors"
+        >
+          Sign Out
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Rich Login & Authentication Notification Stack (Top-Right) -->
+  <div id="auth-notification-stack" class="fixed top-16 right-4 z-50 flex flex-col gap-2.5 max-w-sm w-full pointer-events-none px-2 sm:px-0"></div>
+
+  <!-- Toast Notification Container (Bottom-Right) -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none px-4 sm:px-0"></div>
+
+  <!-- ===================================================================== -->
+  <!-- 1. PUBLIC VIEW (STRICT 4-PART SEQUENCE, 100% READ-ONLY)               -->
+  <!-- ===================================================================== -->
+  <main id="view-public" class="flex-grow relative z-10">
+
+    <!-- =================================================================== -->
+    <!-- PART 1: XAVIER DEBATE CIRCLE & WHAT IT IS ALL ABOUT                 -->
+    <!-- =================================================================== -->
+    <section id="about" class="bg-transparent py-16 sm:py-20 border-b border-slate-200/80">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 flex flex-col items-center text-center">
+
+        <!-- Centered Official Shield Lockup Positioned Directly Beside XAVIER DEBATE CIRCLE & Stand and Deliver — EST. 1996 -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-8 mb-8">
+          <!-- Unaltered Official XDC Shield Emblem -->
+          <div class="w-36 h-40 sm:w-44 sm:h-48 shrink-0 flex items-center justify-center drop-shadow-sm" data-xdc-logo="shield"></div>
+
+          <!-- Brand Title & Motto Lockup Beside the Shield -->
+          <div class="text-center sm:text-left">
+            <div class="text-xs font-bold uppercase tracking-widest text-xdc-gold mb-2">
+              30 Years of Transcending Limits
+            </div>
+            <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-xdc-royal tracking-wider leading-none">
+              XAVIER DEBATE CIRCLE
+            </h1>
+            <p class="text-lg sm:text-2xl font-bold text-xdc-gold tracking-wide mt-2.5">
+              <span class="italic">Stand and Deliver</span> • EST. 1996
+            </p>
+          </div>
+        </div>
+
+        <!-- Concise "What It Is All About" Statement -->
+        <p class="text-base sm:text-lg text-slate-700 max-w-3xl leading-relaxed">
+          Founded in 1996, the <strong class="text-xdc-royal">Xavier Debate Circle</strong> is the official debate and public speaking organization of <strong class="text-xdc-royal">Xavier University – Ateneo de Cagayan</strong>—home to three decades of critical inquiry, championship advocacy, and Atenean discourse.
+        </p>
+
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- PART 2: PURPOSE & HORIZON (WITH MISSION AND VISION CARDS UNCHANGED) -->
+    <!-- =================================================================== -->
+    <section id="purpose-horizon" class="py-14 sm:py-16 bg-white/90 border-b border-slate-200">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6">
+        <div class="text-center mb-8">
+          <h2 class="text-3xl sm:text-4xl font-bold text-xdc-royal">
+            Purpose &amp; Horizon
+          </h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+
+          <!-- Mission Card (Unchanged) -->
+          <div class="p-7 sm:p-8 rounded-xl bg-white border border-slate-200 gold-top-border shadow-sm">
+            <div class="text-2xl font-bold uppercase tracking-widest text-xdc-gold mb-2">
+              Mission
+            </div>
+            <p class="text-sm sm:text-base text-slate-700 leading-relaxed">
+              The Xavier Debate Circle is dedicated to advancing international debating standards among Xavier University students. By cultivating open-minded, critically sharp, and socially aware debaters, the organization fosters holistic personal development and empowers the youth sector to serve as a catalyst for community-wide civic engagement.
+            </p>
+          </div>
+
+          <!-- Vision Card (Unchanged) -->
+          <div class="p-7 sm:p-8 rounded-xl bg-white border border-slate-200 royal-top-border shadow-sm">
+            <div class="text-2xl font-bold uppercase tracking-widest text-xdc-gold mb-2">
+              Vision
+            </div>
+            <p class="text-sm sm:text-base text-slate-700 leading-relaxed">
+              The Xavier Debate Circle envisions itself as a premier bastion of intellectual excellence and fearless discourse, a transformative arena where Atenean minds are forged through competitive fire, empowered with unshakable conviction, and united in elevating the standard of thought in society.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- PART 3: HALL OF FAME & ACHIEVEMENTS                                 -->
+    <!-- =================================================================== -->
+    <section id="hall-of-fame" class="py-14 sm:py-16 bg-xdc-slateBg/80 border-b border-slate-200">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6">
+
+        <!-- Section Header + Search Input -->
+        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4 mb-6">
+          <div>
+            <div class="text-xs font-bold uppercase tracking-widest text-xdc-gold mb-1">
+              Select Any Card to View Full Record
+            </div>
+            <h2 class="text-3xl sm:text-4xl font-bold text-xdc-royal">
+              Hall of Fame
+            </h2>
+          </div>
+
+          <div class="w-full sm:w-72">
+            <input
+              type="text"
+              id="hof-search-input"
+              oninput="renderHallOfFame()"
+              placeholder="Search debater, tournament, host, or tag..."
+              class="w-full px-3.5 py-2 rounded-lg bg-white border border-slate-300 text-xs sm:text-sm text-slate-800 focus:outline-none focus:border-xdc-royal"
+            />
+          </div>
+        </div>
+
+        <!-- Multi-Tag Filter Bar -->
+        <div id="hof-tag-filters" class="flex flex-wrap items-center gap-2 mb-8">
+          <!-- Populated dynamically with All, Nationals, Regionals, International, Intervarsities, Championships, etc. -->
+        </div>
+
+        <!-- Photo Grid (3 columns on desktop) -->
+        <div id="hof-photo-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Populated dynamically via JS -->
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- PART 4: STRICT GMAIL & PASSWORD PORTAL LOGIN                        -->
+    <!-- =================================================================== -->
+    <section id="portal-login" class="py-16 bg-white/90">
+      <div class="max-w-md mx-auto px-4 sm:px-6">
+        <div class="bg-white rounded-xl border border-slate-200 p-6 sm:p-8 shadow-sm royal-top-border">
+          <div class="flex flex-col items-center text-center mb-5">
+            <div class="w-12 h-14 mb-2" data-xdc-logo="shield"></div>
+            <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-xdc-slateBg border border-slate-200 text-[10px] font-bold uppercase tracking-wider text-xdc-royal mb-1.5">
+              <span>🔒 Strict @gmail.com + AES-256 Session Auth</span>
+            </div>
+            <h2 class="text-2xl font-bold text-xdc-royal">
+              Portal Login
+            </h2>
+            <p class="text-xs text-slate-500 mt-1">
+              Sign in strictly with your registered <strong>@gmail.com</strong> address and password
+            </p>
+          </div>
+
+          <!-- Security Rate-Limit & Attempt Status Bar (Max 3 Attempts) -->
+          <div class="mb-4 p-3 rounded-lg bg-xdc-slateBg border border-slate-200 flex items-center justify-between text-[11px]">
+            <div class="flex items-center gap-1.5 font-bold text-xdc-royal">
+              <span id="security-shield-dot" class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              <span id="security-status-label">Brute-Force Rate Limit Active</span>
+            </div>
+            <span id="security-attempts-badge" class="font-bold text-slate-600">
+              3 / 3 Attempts Left
+            </span>
+          </div>
+
+          <!-- Temporary Account Lockout Banner (Shown when 3 attempts fail) -->
+          <div id="login-lockout-banner" class="hidden mb-4 p-3.5 rounded-lg bg-red-50 border border-red-300 text-red-800 text-xs font-bold space-y-1">
+            <div class="flex items-center justify-between">
+              <span>🚨 Brute-Force Lockout Engaged</span>
+              <span id="lockout-countdown-timer" class="px-2 py-0.5 rounded bg-red-700 text-white text-[11px]">30s</span>
+            </div>
+            <p class="text-[11px] font-normal text-red-700">
+              3 consecutive failed login attempts detected. Authentication is locked for 30 seconds.
+            </p>
+          </div>
+
+          <!-- Inline Login Notification / Error Alert Box -->
+          <div id="login-feedback-box" class="hidden mb-4 p-3.5 rounded-lg border text-xs font-bold"></div>
+
+          <form id="portal-login-form" onsubmit="handlePortalLogin(event)" class="space-y-4" autocomplete="off" novalidate>
+            <!-- Strict Gmail Input with Live Format Validation -->
+            <div>
+              <div class="flex items-center justify-between mb-1">
+                <label for="login-gmail-input" class="block text-xs font-bold uppercase text-slate-600">
+                  Gmail Address Only
+                </label>
+                <span id="gmail-live-status" class="text-[11px] font-bold text-slate-400">
+                  Strictly @gmail.com
+                </span>
+              </div>
+              <input
+                type="email"
+                id="login-gmail-input"
+                oninput="validateGmailInputLive()"
+                required
+                placeholder="firstname.lastname@gmail.com"
+                class="w-full px-3.5 py-2 rounded-lg bg-white border border-slate-300 text-sm text-slate-900 focus:outline-none focus:border-xdc-royal"
+              />
+            </div>
+
+            <!-- Password Input -->
+            <div>
+              <div class="flex items-center justify-between mb-1">
+                <label for="login-password-input" class="block text-xs font-bold uppercase text-slate-600">
+                  Password
+                </label>
+                <button
+                  type="button"
+                  onclick="togglePasswordVisibility()"
+                  id="toggle-password-btn"
+                  class="text-[11px] font-bold text-xdc-royal hover:underline"
+                >
+                  Show Password
+                </button>
+              </div>
+              <input
+                type="password"
+                id="login-password-input"
+                required
+                placeholder="Enter your portal password"
+                class="w-full px-3.5 py-2 rounded-lg bg-white border border-slate-300 text-sm text-slate-900 focus:outline-none focus:border-xdc-royal"
+              />
+            </div>
+
+            <!-- Sign In Mode -->
+            <div>
+              <label class="block text-xs font-bold uppercase text-slate-600 mb-1">
+                Sign In Mode
+              </label>
+              <div class="grid grid-cols-2 gap-2">
+                <label class="cursor-pointer">
+                  <input type="radio" name="loginRoleRadio" value="member" checked class="peer sr-only" />
+                  <div class="py-2 px-3 rounded-lg border border-slate-200 text-center text-xs font-bold text-slate-600 peer-checked:border-xdc-royal peer-checked:bg-xdc-royal peer-checked:text-white transition-all">
+                    Member View
+                  </div>
+                </label>
+                <label class="cursor-pointer">
+                  <input type="radio" name="loginRoleRadio" value="officer" class="peer sr-only" />
+                  <div class="py-2 px-3 rounded-lg border border-slate-200 text-center text-xs font-bold text-slate-600 peer-checked:border-xdc-royal peer-checked:bg-xdc-royal peer-checked:text-white transition-all">
+                    Officer View
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              id="login-submit-btn"
+              class="w-full py-2.5 px-4 rounded-lg bg-xdc-royal text-white font-bold text-sm hover:bg-xdc-royalHover transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Sign In with Gmail
+            </button>
+          </form>
+
+          <div class="mt-5 pt-4 border-t border-slate-100 flex items-center justify-end text-[11px] text-slate-500">
+            <button
+              type="button"
+              onclick="toggleTestAccountsModal()"
+              class="font-bold text-xdc-royal hover:underline"
+            >
+              View @gmail.com Test Accounts →
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===================================================================== -->
+  <!-- 2 & 3. MEMBER VIEW & OFFICER VIEW DASHBOARD                           -->
+  <!-- ===================================================================== -->
+  <div id="view-portal" class="hidden flex-grow bg-xdc-slateBg/80 py-10 relative z-10">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 space-y-8">
+
+      <!-- Active Login Session Banner -->
+      <div id="active-session-banner" class="bg-xdc-royal text-white rounded-xl px-5 py-3.5 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3 border-l-4 border-xdc-gold">
+        <div class="flex items-start sm:items-center gap-3">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 shrink-0 mt-1 sm:mt-0"></span>
+          <div class="text-xs sm:text-sm">
+            <span class="font-bold">Verified Gmail Session:</span>
+            <span id="session-banner-text" class="text-slate-200 ml-1"></span>
+            <div class="text-[11px] text-xdc-gold mt-0.5 font-bold">
+              Encrypted Session Active • Auto-Expiry Timer: <span id="session-ttl-badge">15:00</span>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <span id="session-banner-time" class="text-[11px] text-slate-200 font-bold uppercase tracking-wider"></span>
+          <button
+            type="button"
+            onclick="refreshSessionTTL()"
+            class="px-2.5 py-1 rounded bg-white/10 hover:bg-white/20 text-white text-[11px] font-bold border border-white/20"
+          >
+            ↻ Rotate Token
+          </button>
+        </div>
+      </div>
+
+      <!-- (a) Profile Banner -->
+      <section class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm gold-top-border">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-14 shrink-0 hidden sm:flex items-center justify-center" data-xdc-logo="shield"></div>
+            <div>
+              <div class="flex flex-wrap items-center gap-2.5">
+                <h1 id="portal-profile-name" class="text-2xl sm:text-3xl font-bold text-xdc-royal"></h1>
+                <span id="portal-status-badge" class="px-3 py-0.5 rounded-full text-xs font-bold border"></span>
+                <span id="portal-clearance-badge" class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-xdc-goldSoft text-xdc-royal border border-xdc-gold/40"></span>
+              </div>
+              <p id="portal-profile-role" class="text-sm text-slate-600 mt-1"></p>
+              <p id="portal-profile-credentials" class="text-xs text-slate-400 mt-0.5"></p>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-3">
+            <div class="px-4 py-2 rounded-lg bg-xdc-slateBg border border-slate-200 text-xs">
+              <span class="text-slate-500 block">Assigned Committee</span>
+              <strong id="portal-profile-committee" class="text-xdc-royal text-sm"></strong>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- (a.2) Circle Announcements & Directives Board (Editable & Removable by Officers) -->
+      <section class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm royal-top-border">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+          <div>
+            <div class="flex items-center gap-2">
+              <h2 class="text-lg font-bold text-xdc-royal">Circle Announcements &amp; Directives</h2>
+              <span id="portal-announcements-count" class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-xdc-goldSoft text-xdc-royal border border-xdc-gold/40"></span>
+            </div>
+            <p class="text-xs text-slate-500">
+              Official executive memorandums, chamber briefings, and committee notices.
+            </p>
+          </div>
+
+          <!-- Officer Quick Button to Create Announcement -->
+          <div id="officer-announcement-quick-bar" class="hidden items-center gap-2">
+            <button
+              type="button"
+              onclick="openOfficerAnnouncementEditorNew()"
+              class="px-3 py-1.5 rounded-lg bg-xdc-royal text-white text-xs font-bold hover:bg-xdc-royalHover transition-colors shadow-sm"
+            >
+              + New Announcement
+            </button>
+          </div>
+        </div>
+
+        <div id="portal-announcements-container" class="space-y-3">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </section>
+
+      <!-- Dashboard Grid: (b) Quotas Card, (c) My Task Board, (d) Upcoming Events Board -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- (b) Quotas Card -->
+        <div class="lg:col-span-4 bg-white rounded-xl border border-slate-200 p-6 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="text-lg font-bold text-xdc-royal">Semester Quotas</h2>
+              <span id="quota-summary-pill" class="px-2.5 py-0.5 rounded-full text-xs font-bold"></span>
+            </div>
+
+            <div class="space-y-5">
+              <!-- Spar Sessions Progress -->
+              <div>
+                <div class="flex justify-between text-xs font-bold mb-1.5">
+                  <span class="text-slate-700">Spar Sessions</span>
+                  <span id="quota-spars-label" class="text-xdc-royal"></span>
+                </div>
+                <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden border border-slate-200">
+                  <div id="quota-spars-bar" class="h-full bg-xdc-royal rounded-full transition-all duration-300"></div>
+                </div>
+              </div>
+
+              <!-- Training Attendance Progress -->
+              <div>
+                <div class="flex justify-between text-xs font-bold mb-1.5">
+                  <span class="text-slate-700">Training Attendance</span>
+                  <span id="quota-training-label" class="text-xdc-royal"></span>
+                </div>
+                <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden border border-slate-200">
+                  <div id="quota-training-bar" class="h-full bg-xdc-gold rounded-full transition-all duration-300"></div>
+                </div>
+              </div>
+
+              <!-- Tournament Quotas Progress -->
+              <div>
+                <div class="flex justify-between text-xs font-bold mb-1.5">
+                  <span class="text-slate-700">Tournament Quotas</span>
+                  <span id="quota-tournaments-label" class="text-xdc-royal"></span>
+                </div>
+                <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden border border-slate-200">
+                  <div id="quota-tournaments-bar" class="h-full bg-emerald-600 rounded-full transition-all duration-300"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <p class="text-xs text-slate-500 mt-6 pt-4 border-t border-slate-100">
+            Completing semester quotas maintains active tournament subsidy and break eligibility.
+          </p>
+        </div>
+
+        <!-- (c) My Task Board -->
+        <div class="lg:col-span-8 bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+            <div>
+              <h2 class="text-lg font-bold text-xdc-royal">My Task Board</h2>
+              <p class="text-xs text-slate-500">
+                Tasks assigned to you, your committee, or all members. Toggle status or (if Officer) edit &amp; remove directly.
+              </p>
+            </div>
+            <div class="flex items-center gap-2">
+              <span id="member-task-count" class="text-xs font-bold text-xdc-royal bg-xdc-slateBg px-3 py-1 rounded-lg border border-slate-200"></span>
+              <button
+                type="button"
+                id="officer-task-quick-btn"
+                onclick="openOfficerTaskEditorNew()"
+                class="hidden px-3 py-1 rounded-lg bg-xdc-royal text-white text-xs font-bold hover:bg-xdc-royalHover transition-colors"
+              >
+                + Assign Task
+              </button>
+            </div>
+          </div>
+
+          <div id="member-tasks-container" class="space-y-3">
+            <!-- Populated dynamically via JS -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- (d) Upcoming Events Board -->
+      <section class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-5">
+          <div>
+            <h2 class="text-lg font-bold text-xdc-royal">Upcoming Events Board</h2>
+            <p class="text-xs text-slate-500">
+              Scheduled General Assemblies (GAs), Spar Sessions, and Tournament deployments.
+            </p>
+          </div>
+        </div>
+
+        <div id="portal-events-grid" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </section>
+
+      <!-- ================================================================= -->
+      <!-- 3. OFFICER ADMIN PANEL (VISIBLE ONLY IN OFFICER VIEW)             -->
+      <!-- ================================================================= -->
+      <section id="officer-admin-panel" class="hidden bg-white rounded-xl border-2 border-xdc-royal p-6 sm:p-8 shadow-sm space-y-6">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-5 border-b border-slate-200">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-widest text-xdc-gold">
+              Executive &amp; Committee Officer Controls
+            </span>
+            <h2 class="text-2xl font-bold text-xdc-royal">
+              Officer Admin Panel
+            </h2>
+            <p class="text-xs text-slate-500 mt-0.5">
+              Full officer permissions to create, edit, re-ping, duplicate, and remove Tasks, Announcements, Member Statuses, and Events.
+            </p>
+          </div>
+
+          <!-- Four Functional Officer Tabs -->
+          <div class="flex flex-wrap gap-1.5 bg-xdc-slateBg p-1.5 rounded-lg border border-slate-200">
+            <button
+              type="button"
+              onclick="switchOfficerTab('allocator')"
+              id="tab-btn-allocator"
+              class="px-3 py-1.5 rounded-md text-xs font-bold transition-all"
+            >
+              1. Tasks Manager
+            </button>
+            <button
+              type="button"
+              onclick="switchOfficerTab('announcements')"
+              id="tab-btn-announcements"
+              class="px-3 py-1.5 rounded-md text-xs font-bold transition-all"
+            >
+              2. Announcements Manager
+            </button>
+            <button
+              type="button"
+              onclick="switchOfficerTab('directory')"
+              id="tab-btn-directory"
+              class="px-3 py-1.5 rounded-md text-xs font-bold transition-all"
+            >
+              3. Member Directory &amp; Status
+            </button>
+            <button
+              type="button"
+              onclick="switchOfficerTab('editor')"
+              id="tab-btn-editor"
+              class="px-3 py-1.5 rounded-md text-xs font-bold transition-all"
+            >
+              4. Event &amp; Schedule Editor
+            </button>
+          </div>
+        </div>
+
+        <!-- TAB 1: TASK MANAGER & ALLOCATOR (CREATE, EDIT, REMOVE, DUPLICATE, RE-PING) -->
+        <div id="officer-tab-allocator" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div class="lg:col-span-5 bg-xdc-slateBg rounded-xl p-5 border border-slate-200">
+            <div class="flex items-center justify-between mb-3">
+              <h3 id="task-form-heading" class="text-base font-bold text-xdc-royal">Assign New Task</h3>
+              <button
+                type="button"
+                id="task-cancel-edit-btn"
+                onclick="resetTaskForm()"
+                class="hidden px-2.5 py-1 rounded bg-red-50 text-red-700 border border-red-200 text-xs font-bold hover:bg-red-100"
+              >
+                Cancel Edit
+              </button>
+            </div>
+
+            <form id="officer-task-form" onsubmit="handleSaveTask(event)" class="space-y-3.5">
+              <input type="hidden" id="alloc-edit-id" value="" />
+
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">Task Title</label>
+                <input
+                  type="text"
+                  id="alloc-title"
+                  required
+                  placeholder="e.g., Prepare Motions Packet for Friday Spar"
+                  class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs focus:outline-none focus:border-xdc-royal"
+                />
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 mb-1">Assign To</label>
+                  <select
+                    id="alloc-target"
+                    class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs font-bold text-xdc-royal focus:outline-none focus:border-xdc-royal"
+                  ></select>
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 mb-1">Due Date</label>
+                  <input
+                    type="date"
+                    id="alloc-due"
+                    required
+                    value="2026-10-15"
+                    class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs focus:outline-none focus:border-xdc-royal"
+                  />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 mb-1">Priority Level</label>
+                  <select
+                    id="alloc-priority"
+                    class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs font-bold text-xdc-royal focus:outline-none focus:border-xdc-royal"
+                  >
+                    <option value="High">High Priority</option>
+                    <option value="Standard" selected>Standard Priority</option>
+                    <option value="Low">Low Priority</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 mb-1">Initial / Updated Status</label>
+                  <select
+                    id="alloc-status"
+                    class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs font-bold text-xdc-royal focus:outline-none focus:border-xdc-royal"
+                  >
+                    <option value="To Do" selected>To Do</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Completed">Completed</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">Notes / Instructions</label>
+                <textarea
+                  id="alloc-notes"
+                  rows="3"
+                  placeholder="Deliverables, links, or calibration notes..."
+                  class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs focus:outline-none focus:border-xdc-royal"
+                ></textarea>
+              </div>
+
+              <!-- Auto-Send Email Ping Toggle -->
+              <div class="flex items-center justify-between p-3 rounded-lg bg-white border border-slate-200">
+                <div>
+                  <div class="text-xs font-bold text-xdc-royal">Auto-Send Email Ping</div>
+                  <div class="text-[11px] text-slate-500">Send automated Gmail alert upon save</div>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" id="alloc-email-ping" checked class="sr-only peer" />
+                  <div class="w-9 h-5 bg-slate-300 rounded-full peer peer-checked:bg-xdc-royal after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-4"></div>
+                </label>
+              </div>
+
+              <button
+                type="submit"
+                id="task-submit-btn"
+                class="w-full py-2.5 px-4 rounded-lg bg-xdc-royal text-white font-bold text-xs uppercase tracking-wider hover:bg-xdc-royalHover transition-colors"
+              >
+                Allocate Task
+              </button>
+            </form>
+          </div>
+
+          <div class="lg:col-span-7 space-y-3">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <h3 class="text-base font-bold text-xdc-royal">
+                Master Task Registry (<span id="officer-total-tasks-count">0</span>)
+              </h3>
+              <div class="flex flex-wrap items-center gap-1.5">
+                <button
+                  type="button"
+                  onclick="clearCompletedTasks()"
+                  class="px-2.5 py-1 rounded-lg bg-red-50 text-red-700 border border-red-200 text-[11px] font-bold hover:bg-red-100"
+                >
+                  🗑️ Clear Completed Tasks
+                </button>
+              </div>
+            </div>
+
+            <!-- Search & Filters for Officer Tasks -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <input
+                type="text"
+                id="officer-task-search"
+                oninput="renderOfficerTasksList()"
+                placeholder="Search title, notes, assignee..."
+                class="sm:col-span-1 px-3 py-1.5 rounded-lg bg-xdc-slateBg border border-slate-300 text-xs focus:outline-none focus:border-xdc-royal"
+              />
+              <select
+                id="officer-task-status-filter"
+                onchange="renderOfficerTasksList()"
+                class="px-2.5 py-1.5 rounded-lg bg-xdc-slateBg border border-slate-300 text-xs font-bold text-xdc-royal"
+              >
+                <option value="All">All Statuses</option>
+                <option value="To Do">To Do</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Completed">Completed</option>
+              </select>
+              <select
+                id="officer-task-priority-filter"
+                onchange="renderOfficerTasksList()"
+                class="px-2.5 py-1.5 rounded-lg bg-xdc-slateBg border border-slate-300 text-xs font-bold text-xdc-royal"
+              >
+                <option value="All">All Priorities</option>
+                <option value="High">High Priority</option>
+                <option value="Standard">Standard Priority</option>
+                <option value="Low">Low Priority</option>
+              </select>
+            </div>
+
+            <div id="officer-all-tasks-list" class="space-y-2.5 max-h-[460px] overflow-y-auto pr-1"></div>
+          </div>
+        </div>
+
+        <!-- TAB 2: ANNOUNCEMENTS MANAGER (CREATE, EDIT, PIN/UNPIN, DUPLICATE, RE-PING, REMOVE) -->
+        <div id="officer-tab-announcements" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div class="lg:col-span-5 bg-xdc-slateBg rounded-xl p-5 border border-slate-200">
+            <div class="flex items-center justify-between mb-3">
+              <h3 id="ann-form-heading" class="text-base font-bold text-xdc-royal">Publish New Announcement</h3>
+              <button
+                type="button"
+                id="ann-cancel-edit-btn"
+                onclick="resetAnnouncementForm()"
+                class="hidden px-2.5 py-1 rounded bg-red-50 text-red-700 border border-red-200 text-xs font-bold hover:bg-red-100"
+              >
+                Cancel Edit
+              </button>
+            </div>
+
+            <form id="officer-announcement-form" onsubmit="handleSaveAnnouncement(event)" class="space-y-3.5">
+              <input type="hidden" id="ann-edit-id" value="" />
+
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">Announcement Headline</label>
+                <input
+                  type="text"
+                  id="ann-title"
+                  required
+                  placeholder="e.g., Mandatory Contingent Briefing for Mindanao Parliamentary"
+                  class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs focus:outline-none focus:border-xdc-royal"
+                />
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 mb-1">Category Badge</label>
+                  <select
+                    id="ann-category"
+                    class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs font-bold text-xdc-royal focus:outline-none focus:border-xdc-royal"
+                  >
+                    <option value="Urgent Directive">Urgent Directive</option>
+                    <option value="General Assembly">General Assembly</option>
+                    <option value="Tournament Notice">Tournament Notice</option>
+                    <option value="Training & Spar">Training &amp; Spar</option>
+                    <option value="Committee Memo">Committee Memo</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 mb-1">Target Audience</label>
+                  <select
+                    id="ann-audience"
+                    class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs font-bold text-xdc-royal focus:outline-none focus:border-xdc-royal"
+                  >
+                    <option value="All Members">All XDC Members</option>
+                    <option value="Training & Education">Training &amp; Education</option>
+                    <option value="Adjudication & Tabulation">Adjudication &amp; Tabulation</option>
+                    <option value="Tournament & Externals">Tournament &amp; Externals</option>
+                    <option value="Finance & Logistics">Finance &amp; Logistics</option>
+                    <option value="Publicity & Research">Publicity &amp; Research</option>
+                    <option value="External Ministry">External Ministry</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">Announcement Details / Directive Body</label>
+                <textarea
+                  id="ann-body"
+                  rows="4"
+                  required
+                  placeholder="Write the full announcement, venue details, motion release time, or preparation instructions..."
+                  class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs focus:outline-none focus:border-xdc-royal"
+                ></textarea>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <label class="flex items-center justify-between p-2.5 rounded-lg bg-white border border-slate-200 cursor-pointer">
+                  <span class="text-xs font-bold text-xdc-royal">📌 Pin to Top</span>
+                  <input type="checkbox" id="ann-pinned" class=" accent-xdc-royal w-4 h-4" />
+                </label>
+                <label class="flex items-center justify-between p-2.5 rounded-lg bg-white border border-slate-200 cursor-pointer">
+                  <span class="text-xs font-bold text-xdc-royal">✉ Gmail Broadcast</span>
+                  <input type="checkbox" id="ann-email-ping" checked class="accent-xdc-royal w-4 h-4" />
+                </label>
+              </div>
+
+              <button
+                type="submit"
+                id="ann-submit-btn"
+                class="w-full py-2.5 px-4 rounded-lg bg-xdc-royal text-white font-bold text-xs uppercase tracking-wider hover:bg-xdc-royalHover transition-colors"
+              >
+                Publish Announcement
+              </button>
+            </form>
+          </div>
+
+          <div class="lg:col-span-7 space-y-3">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <h3 class="text-base font-bold text-xdc-royal">
+                Active Announcements Registry (<span id="officer-total-ann-count">0</span>)
+              </h3>
+              <button
+                type="button"
+                onclick="clearUnpinnedAnnouncements()"
+                class="px-2.5 py-1 rounded-lg bg-red-50 text-red-700 border border-red-200 text-[11px] font-bold hover:bg-red-100"
+              >
+                🗑️ Remove Unpinned Announcements
+              </button>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <input
+                type="text"
+                id="officer-ann-search"
+                oninput="renderOfficerAnnouncementsList()"
+                placeholder="Search announcements by headline, content, author..."
+                class="px-3 py-1.5 rounded-lg bg-xdc-slateBg border border-slate-300 text-xs focus:outline-none focus:border-xdc-royal"
+              />
+              <select
+                id="officer-ann-category-filter"
+                onchange="renderOfficerAnnouncementsList()"
+                class="px-2.5 py-1.5 rounded-lg bg-xdc-slateBg border border-slate-300 text-xs font-bold text-xdc-royal"
+              >
+                <option value="All">All Categories</option>
+                <option value="Urgent Directive">Urgent Directive</option>
+                <option value="General Assembly">General Assembly</option>
+                <option value="Tournament Notice">Tournament Notice</option>
+                <option value="Training & Spar">Training &amp; Spar</option>
+                <option value="Committee Memo">Committee Memo</option>
+              </select>
+            </div>
+
+            <div id="officer-all-announcements-list" class="space-y-2.5 max-h-[460px] overflow-y-auto pr-1"></div>
+          </div>
+        </div>
+
+        <!-- TAB 3: MEMBER DIRECTORY, GMAIL CREDENTIALS & STATUS MANAGER -->
+        <div id="officer-tab-directory" class="hidden space-y-5">
+          <form onsubmit="handleSaveMemberAccount(event)" class="bg-xdc-slateBg p-4 rounded-xl border border-slate-200 space-y-3" novalidate>
+            <input type="hidden" id="member-edit-id" value="" />
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+              <span id="member-form-heading" class="text-xs font-bold text-xdc-royal uppercase tracking-wider">Register New Member (Strict @gmail.com Required)</span>
+              <div class="flex items-center gap-2">
+                <span class="text-[11px] font-bold text-slate-500">Only @gmail.com addresses are accepted</span>
+                <button
+                  type="button"
+                  id="member-cancel-edit-btn"
+                  onclick="resetMemberForm()"
+                  class="hidden px-2 py-0.5 rounded bg-red-50 text-red-700 border border-red-200 text-[11px] font-bold"
+                >
+                  Cancel Edit
+                </button>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-2.5">
+              <input
+                type="text"
+                id="new-member-name"
+                required
+                placeholder="Full Name"
+                class="px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-xs"
+              />
+              <input
+                type="email"
+                id="new-member-email"
+                required
+                placeholder="Strict Gmail (name@gmail.com)"
+                class="px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-xs"
+              />
+              <input
+                type="text"
+                id="new-member-password"
+                required
+                placeholder="Password"
+                class="px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-xs"
+              />
+              <input
+                type="text"
+                id="new-member-role"
+                placeholder="Role / Title (e.g., Varsity Debater)"
+                class="px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-xs"
+              />
+              <select
+                id="new-member-committee"
+                class="px-2.5 py-1.5 rounded-lg bg-white border border-slate-300 text-xs font-bold text-xdc-royal"
+              >
+                <option value="Training & Education">Training &amp; Education</option>
+                <option value="Adjudication & Tabulation">Adjudication &amp; Tabulation</option>
+                <option value="Tournament & Externals">Tournament &amp; Externals</option>
+                <option value="Finance & Logistics">Finance &amp; Logistics</option>
+                <option value="Publicity & Research">Publicity &amp; Research</option>
+                <option value="External Ministry">External Ministry</option>
+              </select>
+              <div class="flex items-center gap-2">
+                <label class="inline-flex items-center gap-1 text-xs font-bold text-xdc-royal bg-white px-2.5 py-1.5 rounded-lg border border-slate-300 cursor-pointer shrink-0">
+                  <input type="checkbox" id="new-member-isofficer" />
+                  <span>Officer</span>
+                </label>
+                <button
+                  type="submit"
+                  id="member-submit-btn"
+                  class="w-full py-1.5 px-3 rounded-lg bg-xdc-royal text-white text-xs font-bold hover:bg-xdc-royalHover"
+                >
+                  + Register
+                </button>
+              </div>
+            </div>
+          </form>
+
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <p class="text-xs text-slate-600">
+              Edit any member's <strong>Profile</strong>, <strong>Membership Status</strong>, <strong>Assigned Committee</strong>, <strong>Officer Clearance</strong>, or <strong>Quota Progress</strong> directly below.
+            </p>
+            <input
+              type="text"
+              id="directory-search-input"
+              oninput="renderOfficerDirectory()"
+              placeholder="Search member, @gmail.com, or committee..."
+              class="w-full sm:w-72 px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-xs focus:outline-none focus:border-xdc-royal"
+            />
+          </div>
+
+          <div class="overflow-x-auto border border-slate-200 rounded-xl">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-xdc-slateBg border-b border-slate-200 text-[11px] font-bold uppercase text-slate-600">
+                  <th class="py-3 px-4">Member &amp; Registered Gmail</th>
+                  <th class="py-3 px-4">Assigned Committee</th>
+                  <th class="py-3 px-4">Status &amp; Clearance</th>
+                  <th class="py-3 px-4 text-center">Spars</th>
+                  <th class="py-3 px-4 text-center">Trainings</th>
+                  <th class="py-3 px-4 text-center">Tournaments</th>
+                  <th class="py-3 px-4 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="officer-directory-tbody" class="divide-y divide-slate-200 text-xs"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAB 4: EVENT & SCHEDULE EDITOR (HALL OF FAME LOCKED TO SOURCE CODE) -->
+        <div id="officer-tab-editor" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+          <!-- Left Column (7 Cols): Upcoming Events Editor (Editable by Officers) -->
+          <div class="lg:col-span-7 space-y-4">
+            <h3 class="text-base font-bold text-xdc-royal border-b border-slate-200 pb-2">
+              Upcoming Events &amp; Schedule Manager
+            </h3>
+            <form onsubmit="handleSaveEvent(event)" class="bg-xdc-slateBg p-4 rounded-xl border border-slate-200 space-y-3">
+              <input type="hidden" id="event-edit-id" value="" />
+              <div class="flex items-center justify-between">
+                <span id="event-form-label" class="text-xs font-bold text-xdc-royal">Add Upcoming Event</span>
+                <button type="button" onclick="resetEventForm()" id="event-cancel-btn" class="hidden text-xs text-red-600 font-bold">Cancel Edit</button>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                <input
+                  type="text"
+                  id="event-title-input"
+                  required
+                  placeholder="Event Title"
+                  class="sm:col-span-2 px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-xs"
+                />
+                <select id="event-type-input" class="px-2.5 py-1.5 rounded-lg bg-white border border-slate-300 text-xs font-bold text-xdc-royal">
+                  <option value="GA">General Assembly</option>
+                  <option value="Spar">Spar Session</option>
+                  <option value="Tournament">Tournament</option>
+                </select>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <input
+                  type="text"
+                  id="event-date-input"
+                  required
+                  placeholder="Date &amp; Time (e.g., Oct 18 • 4:30 PM)"
+                  class="px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-xs"
+                />
+                <input
+                  type="text"
+                  id="event-loc-input"
+                  required
+                  placeholder="Venue (e.g., XU Little Theater)"
+                  class="px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-xs"
+                />
+              </div>
+              <button type="submit" class="w-full py-2 rounded-lg bg-xdc-royal text-white text-xs font-bold hover:bg-xdc-royalHover">
+                Save Event to Schedule
+              </button>
+            </form>
+
+            <div id="officer-events-list" class="space-y-2"></div>
+          </div>
+
+          <!-- Right Column (5 Cols): Read-Only Source-Locked Hall of Fame Security Notice -->
+          <div class="lg:col-span-5 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+              <h3 class="text-base font-bold text-xdc-royal">
+                Hall of Fame Archive Protection
+              </h3>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-xdc-royal text-white border border-xdc-gold">
+                🔒 Locked by Code Owner
+              </span>
+            </div>
+
+            <div class="p-5 rounded-xl bg-xdc-slateBg border border-slate-200 gold-top-border space-y-3">
+              <div class="text-xs font-bold text-xdc-royal">
+                Read-Only Institutional Archive (Tamper Protection Active)
+              </div>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                To protect XDC's 30-year historical record from unauthorized edits or accidental deletion, the <strong>Hall of Fame &amp; Achievements</strong> registry cannot be modified from the Officer Portal UI.
+              </p>
+              <div class="p-3 rounded-lg bg-white border border-slate-200 text-[11px] text-slate-700 space-y-1">
+                <div class="font-bold text-xdc-royal">Coder / Site Owner Maintenance Only:</div>
+                <p>
+                  All Hall of Fame entries, photos, and tags are strictly locked via <code class="px-1 py-0.5 bg-slate-100 rounded text-xdc-royal font-bold">Object.freeze(HALL_OF_FAME_DATA)</code> at the top of the source code script.
+                </p>
+              </div>
+              <div class="pt-1">
+                <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-2">
+                  Currently Locked Source Records (<span id="locked-hof-count">0</span>)
+                </div>
+                <div id="officer-readonly-hof-list" class="space-y-1.5 max-h-56 overflow-y-auto pr-1"></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ================================================================= -->
+      <!-- 4. CODER ROOT SECURITY CONSOLE & LIVE AUDIT LOG                   -->
+      <!--    STRICTLY VISIBLE ONLY TO albert.melodia@gmail.com              -->
+      <!-- ================================================================= -->
+      <section
+        id="coder-root-security-console"
+        class="hidden bg-white rounded-xl border-2 border-xdc-gold p-6 sm:p-8 shadow-md space-y-6"
+      >
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-5 border-b border-slate-200">
+          <div>
+            <div class="inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-xdc-royal text-white text-[10px] font-bold uppercase tracking-widest border border-xdc-gold mb-2">
+              <span>🛡️ Coder Root Eyes Only • Exclusive Access: albert.melodia@gmail.com</span>
+            </div>
+            <h2 class="text-2xl font-bold text-xdc-royal">
+              Coder Root Security Console &amp; Live Audit Log
+            </h2>
+            <p class="text-xs text-slate-600 mt-1">
+              This console is strictly invisible to Public visitors, Members, and all other Officers. Only the Coder Root account (<code class="font-bold text-xdc-royal">albert.melodia@gmail.com</code>) can inspect encrypted session tokens, rate-limit lockouts, and real-time audit telemetry.
+            </p>
+          </div>
+
+          <!-- Security Simulation & Reset Controls for the Coder -->
+          <div class="flex flex-wrap items-center gap-2 shrink-0">
+            <button
+              type="button"
+              onclick="simulateBruteForceAttack()"
+              class="px-3 py-1.5 rounded-lg bg-red-50 text-red-700 border border-red-200 text-xs font-bold hover:bg-red-100 transition-colors"
+            >
+              ⚡ Simulate 3-Try Brute-Force
+            </button>
+            <button
+              type="button"
+              onclick="clearAllBruteForceLockouts()"
+              class="px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold hover:bg-emerald-100 transition-colors"
+            >
+              ✓ Clear Rate-Limit Lockouts
+            </button>
+            <button
+              type="button"
+              onclick="refreshSessionTTL()"
+              class="px-3 py-1.5 rounded-lg bg-xdc-royal text-white text-xs font-bold hover:bg-xdc-royalHover transition-colors"
+            >
+              ↻ Re-Encrypt Session Token
+            </button>
+          </div>
+        </div>
+
+        <!-- Encrypted Session Token Inspector & Rate-Limit Telemetry Cards -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+          <div class="lg:col-span-7 p-4 rounded-xl bg-xdc-slateBg border border-slate-200 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-xdc-royal">
+                Active Encrypted Session Token (AES-256-GCM + SHA-256)
+              </span>
+              <span id="coder-token-status-pill" class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] font-bold">
+                VERIFIED SIGNATURE
+              </span>
+            </div>
+            <div class="p-2.5 rounded-lg bg-white border border-slate-200 text-[11px] text-xdc-royal font-bold break-all select-all" id="coder-full-token-display"></div>
+            <div class="grid grid-cols-3 gap-2 text-[11px] text-slate-600 pt-1">
+              <div>
+                <span class="text-slate-400 block">Client Fingerprint</span>
+                <strong id="coder-session-fingerprint" class="text-xdc-royal"></strong>
+              </div>
+              <div>
+                <span class="text-slate-400 block">Issued At (IAT)</span>
+                <strong id="coder-session-iat" class="text-xdc-royal"></strong>
+              </div>
+              <div>
+                <span class="text-slate-400 block">Expires At (EXP)</span>
+                <strong id="coder-session-exp" class="text-xdc-royal"></strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="lg:col-span-5 p-4 rounded-xl bg-xdc-slateBg border border-slate-200 flex flex-col justify-between space-y-3">
+            <div>
+              <div class="text-[11px] font-bold uppercase tracking-wider text-xdc-royal mb-2">
+                Security Architecture Status
+              </div>
+              <div class="space-y-1.5 text-xs">
+                <div class="flex items-center justify-between">
+                  <span class="text-slate-600">Authentication Policy:</span>
+                  <strong class="text-xdc-royal">Strict @gmail.com Regex</strong>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-slate-600">Brute-Force Threshold:</span>
+                  <strong class="text-xdc-royal">3 Failed Tries → 30s Lockout</strong>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-slate-600">Current Failed Attempts:</span>
+                  <strong id="coder-failed-attempts-stat" class="text-xdc-royal">0 / 3</strong>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-slate-600">Hall of Fame Integrity:</span>
+                  <strong class="text-emerald-700">Object.freeze() Locked</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Security Audit Log Stream -->
+        <div class="space-y-3">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              <h3 class="text-base font-bold text-xdc-royal">
+                Live Security Audit Log (<span id="coder-log-total-count">0</span> Events)
+              </h3>
+            </div>
+            <input
+              type="text"
+              id="coder-audit-search"
+              oninput="renderCoderSecurityConsole()"
+              placeholder="Filter logs by event type, @gmail.com, severity, or token..."
+              class="w-full sm:w-80 px-3 py-1.5 rounded-lg bg-xdc-slateBg border border-slate-300 text-xs focus:outline-none focus:border-xdc-royal"
+            />
+          </div>
+
+          <div id="coder-audit-log-stream" class="space-y-2 max-h-96 overflow-y-auto pr-1"></div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- TEST CREDENTIALS HELPER MODAL (FOR PREVIEW TESTING)                   -->
+  <!-- ===================================================================== -->
+  <div
+    id="test-accounts-modal"
+    class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4"
+    onclick="if(event.target.id === 'test-accounts-modal') toggleTestAccountsModal()"
+  >
+    <div class="bg-white rounded-2xl max-w-lg w-full border border-slate-200 shadow-2xl overflow-hidden royal-top-border">
+      <div class="p-5 border-b border-slate-200 flex items-center justify-between">
+        <div>
+          <span class="text-[10px] font-bold uppercase tracking-widest text-xdc-gold">Preview Helper • Strict @gmail.com Accounts</span>
+          <h3 class="text-lg font-bold text-xdc-royal">Sample Gmail &amp; Password Credentials</h3>
+        </div>
+        <button
+          type="button"
+          onclick="toggleTestAccountsModal()"
+          class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs"
+        >
+          ✕
+        </button>
+      </div>
+      <div class="p-5 space-y-3 max-h-96 overflow-y-auto">
+        <p class="text-xs text-slate-600">
+          Click <strong>Auto-Fill</strong> on any account below to test strict <code>@gmail.com</code> authentication. Note that <strong>only</strong> <code>albert.melodia@gmail.com</code> (Coder Root) can view the Live Security Audit Log.
+        </p>
+        <div id="test-accounts-list" class="space-y-2"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- CLICK-TO-REVEAL ACHIEVEMENT DETAIL MODAL (100% READ-ONLY LIGHTBOX)    -->
+  <!-- ===================================================================== -->
+  <div
+    id="achievement-detail-modal"
+    class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto"
+    onclick="handleModalBackdropClick(event)"
+  >
+    <div class="bg-white rounded-2xl max-w-2xl w-full border border-slate-200 shadow-2xl overflow-hidden my-8">
+      
+      <!-- Modal Photo Banner -->
+      <div class="relative h-60 sm:h-72 bg-slate-900 overflow-hidden">
+        <img
+          id="modal-achievement-img"
+          src=""
+          alt="Achievement Photo"
+          class="w-full h-full object-cover"
+          onerror="this.src='https://placehold.co/800x500/08206B/C4922A?text=Xavier+Debate+Circle'"
+        />
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/25 to-transparent"></div>
+
+        <!-- Top Right Close Button Only (Strictly Read-Only for Public Visitors) -->
+        <div class="absolute top-3 right-3">
+          <button
+            type="button"
+            onclick="closeAchievementModal()"
+            class="w-8 h-8 rounded-lg bg-white/95 hover:bg-white text-slate-800 font-bold text-sm shadow-md flex items-center justify-center"
+          >
+            ✕
+          </button>
+        </div>
+
+        <!-- Bottom Overlay: Tags, Year & Tournament Title -->
+        <div class="absolute bottom-4 left-5 right-5 text-white">
+          <div id="modal-achievement-tags" class="flex flex-wrap items-center gap-1.5 mb-2"></div>
+          <h3 id="modal-achievement-tournament" class="text-2xl sm:text-3xl font-bold leading-tight"></h3>
+        </div>
+      </div>
+
+      <!-- Modal Body: The 4 Required Achievement Details -->
+      <div class="p-6 space-y-4 bg-white">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+          <!-- 1. People & Teams Involved -->
+          <div class="p-4 rounded-xl bg-xdc-slateBg border border-slate-200 gold-top-border">
+            <div class="text-[11px] font-bold uppercase tracking-widest text-xdc-gold mb-1">
+              1. People &amp; Teams Involved
+            </div>
+            <p id="modal-detail-people" class="text-sm font-bold text-xdc-royal leading-relaxed"></p>
+          </div>
+
+          <!-- 2. Their Achievements -->
+          <div class="p-4 rounded-xl bg-xdc-slateBg border border-slate-200 gold-top-border">
+            <div class="text-[11px] font-bold uppercase tracking-widest text-xdc-gold mb-1">
+              2. Their Achievements
+            </div>
+            <p id="modal-detail-achievements" class="text-sm font-bold text-xdc-royal leading-relaxed"></p>
+          </div>
+
+          <!-- 3. Where It Was Hosted -->
+          <div class="p-4 rounded-xl bg-xdc-slateBg border border-slate-200">
+            <div class="text-[11px] font-bold uppercase tracking-widest text-slate-500 mb-1">
+              3. Where It Was Hosted
+            </div>
+            <p id="modal-detail-where" class="text-sm font-bold text-slate-800 leading-relaxed"></p>
+          </div>
+
+          <!-- 4. Who Hosted -->
+          <div class="p-4 rounded-xl bg-xdc-slateBg border border-slate-200">
+            <div class="text-[11px] font-bold uppercase tracking-widest text-slate-500 mb-1">
+              4. Who Hosted
+            </div>
+            <p id="modal-detail-who" class="text-sm font-bold text-slate-800 leading-relaxed"></p>
+          </div>
+
+        </div>
+
+        <!-- Modal Footer Actions (Read-Only) -->
+        <div class="pt-3 border-t border-slate-200 flex items-center justify-between gap-2">
+          <span class="text-xs text-slate-500 italic">
+            Xavier Debate Circle • “Stand and Deliver” (Est. 1996)
+          </span>
+          <button
+            type="button"
+            onclick="closeAchievementModal()"
+            class="px-5 py-1.5 rounded-lg bg-xdc-royal text-white text-xs font-bold hover:bg-xdc-royalHover transition-colors"
+          >
+            Close Details
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- FOOTER                                                                -->
+  <!-- ===================================================================== -->
+  <footer class="bg-white border-t border-slate-200 py-6 mt-auto relative z-10">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
+      <div class="flex items-center gap-2.5">
+        <div class="w-6 h-7 shrink-0" data-xdc-logo="shield"></div>
+        <span class="font-bold text-xdc-royal">Xavier Debate Circle</span>
+      </div>
+      <div>
+        Xavier University – Ateneo de Cagayan • Cagayan de Oro City
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===================================================================== -->
+  <!-- APPLICATION STATE & INTERACTIVE LOGIC                                 -->
+  <!-- ===================================================================== -->
+  <script>
+    /* =====================================================================
+     * CODER / SITE OWNER ONLY CONFIGURATION: HALL OF FAME ARCHIVE
+     * =====================================================================
+     * SECURITY NOTICE:
+     * This dataset is strictly locked in source code via deep Object.freeze()
+     * so that neither public visitors nor logged-in Officers can tamper with,
+     * edit, or delete Hall of Fame achievements from the browser interface.
+     * ===================================================================== */
+    const HALL_OF_FAME_DATA = Object.freeze([
+      Object.freeze({
+        id: 'h-10miv',
+        tournament: '10th MIV',
+        year: '2025',
+        people: 'Hannah Amerol & James Cachola',
+        achievements: 'Grandfinalist — Hannah Amerol & James Cachola (10th Mindanao InterVarsity)',
+        whereHosted: 'Cagayan de Oro City',
+        whoHosted: 'Xavier Debate Circle (XDC) & Mindanao Debate Union',
+        tags: Object.freeze(['Intervarsities', 'Regionals', 'Championships']),
+        photo: 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?auto=format&fit=crop&w=1000&q=80'
+      }),
+      Object.freeze({
+        id: 'h1',
+        tournament: 'Philippine Intercollegiate Debating Championship (PIDC)',
+        year: '2025',
+        people: 'Team XU-A: Albert Vinc A. Melodia, Sofia Isabel Montemayor & Miguel Lorenzo Cabrera',
+        achievements: 'Open Semifinalists • Top 5 Breaking Team • 3rd Best Speaker of the Tournament (Albert Vinc A. Melodia)',
+        whereHosted: 'Iloilo City, Western Visayas, Philippines',
+        whoHosted: 'University of the Philippines Visayas Debate Circle',
+        tags: Object.freeze(['Nationals', 'Championships']),
+        photo: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=1000&q=80'
+      }),
+      Object.freeze({
+        id: 'h2',
+        tournament: 'Visayas-Mindanao Debate Championship (VMDC)',
+        year: '2025',
+        people: 'Team XU-1: Albert Vinc A. Melodia & Sofia Isabel Montemayor • Adjudicator: Camille Therese Uy',
+        achievements: 'Grand Champions • Overall Finals Best Speaker (Albert Vinc A. Melodia) • Top Breaking Adjudicator',
+        whereHosted: 'Cebu City, Philippines',
+        whoHosted: 'University of San Carlos Debate Society & VisMin Council',
+        tags: Object.freeze(['Regionals', 'Championships']),
+        photo: 'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1000&q=80'
+      }),
+      Object.freeze({
+        id: 'h4',
+        tournament: 'Australasian Intervarsity Debating Championships (Australs)',
+        year: '2024',
+        people: 'XU Ateneo Contingent: Albert Vinc A. Melodia, Sofia Isabel Montemayor & Miguel Lorenzo Cabrera',
+        achievements: 'EFL Grand Finalists • Open Octofinalists • Top 10 EFL Speaker Citation',
+        whereHosted: 'Kuala Lumpur, Malaysia',
+        whoHosted: 'Australasian Intervarsity Debating Association',
+        tags: Object.freeze(['International', 'Intervarsities', 'Championships']),
+        photo: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=1000&q=80'
+      }),
+      Object.freeze({
+        id: 'h5',
+        tournament: 'National Debate Championship (NDC)',
+        year: '2024',
+        people: 'Xavier University Contingent: Sofia Isabel Montemayor, Hannah Amerol & James Cachola',
+        achievements: 'Open Quarterfinalists • Best Adjudicator Panelist Citation (Sofia Isabel Montemayor)',
+        whereHosted: 'Metro Manila, Philippines',
+        whoHosted: 'Philippine Debate Union',
+        tags: Object.freeze(['Nationals', 'Championships']),
+        photo: 'https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&w=1000&q=80'
+      }),
+      Object.freeze({
+        id: 'h6',
+        tournament: 'Sakto Discourse: Mindanao Parliamentary Invitational',
+        year: '2023',
+        people: 'XDC Open & Novice Roster coached by Albert Vinc A. Melodia',
+        achievements: 'Overall Champions • Novice Grand Champions • Best Finals Speaker',
+        whereHosted: 'Xavier University – Ateneo de Cagayan, Cagayan de Oro City',
+        whoHosted: 'Xavier Debate Circle (XDC)',
+        tags: Object.freeze(['Regionals', 'Intervarsities', 'Championships']),
+        photo: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1000&q=80'
+      })
+    ]);
+
+    /**
+     * Renders the exact, unaltered official Xavier Debate Circle (XDC) shield emblem
+     */
+    function getOfficialXdcLogoSvg(variant = 'shield') {
+      const includeBottomWordmark = variant === 'full';
+      const viewBox = includeBottomWordmark ? '0 0 360 405' : '35 5 290 288';
+
+      return `
+        <svg viewBox="${viewBox}" class="w-full h-full" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Xavier Debate Circle Official Shield Emblem">
+          <!-- Bottom Navy Ribbon Scroll with Swallowtail Ends Behind Shield Base -->
+          <path d="M 103 212 L 95 275 L 180 288 L 265 275 L 257 212 Z" fill="#08206B" />
+          <polygon points="118,228 111,260 154,271 134,242" fill="#FFFFFF" />
+          <polygon points="242,228 249,260 206,271 226,242" fill="#FFFFFF" />
+
+          <!-- Outer Deep Navy Shield with Pointed Center Peak & Concave Top Edges -->
+          <path d="M 180 12
+                   C 208 38, 255 52, 298 48
+                   C 305 155, 272 232, 180 287
+                   C 88 232, 55 155, 62 48
+                   C 105 52, 152 38, 180 12 Z"
+                fill="#08206B" />
+
+          <!-- White Inner Shield Border Channel -->
+          <path d="M 180 33
+                   C 205 55, 244 67, 278 64
+                   C 283 154, 255 217, 180 266
+                   C 105 217, 77 154, 82 64
+                   C 116 67, 155 55, 180 33 Z"
+                fill="#FFFFFF" />
+
+          <!-- Inner Deep Navy Shield Field -->
+          <path d="M 180 51
+                   C 202 70, 235 80, 263 78
+                   C 267 152, 243 204, 180 246
+                   C 117 204, 93 152, 97 78
+                   C 125 80, 158 70, 180 51 Z"
+                fill="#08206B" />
+
+          <!-- White Cross Dividing the 4 Quadrants -->
+          <rect x="176.5" y="76" width="7" height="140" fill="#FFFFFF" />
+          <rect x="108" y="142.5" width="144" height="7" fill="#FFFFFF" />
+
+          <!-- Top-Left Quadrant: White Lectern/Podium with 3 Curved Microphones & 3 Vertical Bars -->
+          <g fill="#FFFFFF" stroke="#FFFFFF" stroke-linejoin="round">
+            <circle cx="136" cy="94" r="2.5" />
+            <path d="M 136 96.5 L 139 103" stroke-width="1.8" fill="none" />
+            <circle cx="145" cy="92.5" r="2.5" />
+            <path d="M 145 95 L 145 103" stroke-width="1.8" fill="none" />
+            <circle cx="154" cy="94" r="2.5" />
+            <path d="M 154 96.5 L 151 103" stroke-width="1.8" fill="none" />
+            <polygon points="129,103 161,103 158,111 132,111" />
+            <rect x="135" y="111" width="20" height="20" fill="#08206B" stroke="#FFFFFF" stroke-width="2" />
+            <line x1="141" y1="114" x2="141" y2="128" stroke="#FFFFFF" stroke-width="1.8" />
+            <line x1="145" y1="114" x2="145" y2="128" stroke="#FFFFFF" stroke-width="1.8" />
+            <line x1="149" y1="114" x2="149" y2="128" stroke="#FFFFFF" stroke-width="1.8" />
+            <rect x="132" y="131" width="26" height="3" />
+          </g>
+
+          <!-- Top-Right Quadrant: White Tilted Ceremonial Gavel -->
+          <g transform="translate(216, 111) rotate(-42)" fill="#FFFFFF">
+            <rect x="-15" y="-7" width="30" height="12" rx="2" />
+            <rect x="-18" y="-8.5" width="3.5" height="15" rx="1" />
+            <rect x="14.5" y="-8.5" width="3.5" height="15" rx="1" />
+            <rect x="-2.2" y="5" width="4.4" height="26" rx="1.8" />
+          </g>
+
+          <!-- Bottom-Left Quadrant: White Balanced Scales of Justice -->
+          <g stroke="#FFFFFF" fill="none" stroke-width="2" stroke-linecap="round">
+            <line x1="145" y1="165" x2="145" y2="196" />
+            <rect x="134" y="196" width="22" height="3.5" rx="1" fill="#FFFFFF" stroke="none" />
+            <line x1="129" y1="170" x2="161" y2="170" />
+            <line x1="130" y1="170" x2="125" y2="184" stroke-width="1.5" />
+            <line x1="130" y1="170" x2="135" y2="184" stroke-width="1.5" />
+            <path d="M 124 184 Q 130 190 136 184 Z" fill="#FFFFFF" stroke="none" />
+            <line x1="160" y1="170" x2="155" y2="184" stroke-width="1.5" />
+            <line x1="160" y1="170" x2="165" y2="184" stroke-width="1.5" />
+            <path d="M 154 184 Q 160 190 166 184 Z" fill="#FFFFFF" stroke="none" />
+          </g>
+
+          <!-- Bottom-Right Quadrant: White Crossed Swords -->
+          <g stroke="#FFFFFF" stroke-width="2.8" stroke-linecap="round">
+            <line x1="201" y1="196" x2="229" y2="168" />
+            <line x1="203" y1="187" x2="210" y2="194" stroke-width="2.2" />
+            <line x1="229" y1="196" x2="201" y2="168" />
+            <line x1="220" y1="194" x2="227" y2="187" stroke-width="2.2" />
+          </g>
+
+          <!-- Center Intersection: Three Interlocking Antique Gold Rings (#C4922A) -->
+          <g fill="none" stroke="#C4922A" stroke-width="5">
+            <circle cx="180" cy="134" r="16.5" />
+            <circle cx="169" cy="152" r="16.5" />
+            <circle cx="191" cy="152" r="16.5" />
+          </g>
+
+          <!-- Rounded Navy Plaque Overlapping Lower Shield ("Stand and Deliver" & "EST. 1996") -->
+          <rect x="112" y="206" width="136" height="44" rx="8" fill="#08206B" />
+          <text x="180" y="227" text-anchor="middle" fill="#FFFFFF" font-family="'Brush Script MT', 'Segoe Script', 'Lucida Handwriting', 'Constantia', cursive" font-size="16.5" font-style="italic" font-weight="bold">
+            Stand and Deliver
+          </text>
+          <text x="180" y="244" text-anchor="middle" fill="#FFFFFF" font-family="Constantia, Georgia, serif" font-size="11.5" letter-spacing="1.2">
+            EST. 1996
+          </text>
+        </svg>
+      `;
+    }
+
+    const STRICT_GMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+
+    const state = {
+      role: 'public',
+      activeMemberId: 'm1',
+      lastLoginTimestamp: 'Preview Session',
+      sessionToken: '',
+      sessionIssuedAt: '',
+      sessionExpiresAt: '',
+      sessionFingerprint: 'CDO-XU-NODE-84A9',
+      sessionSecondsRemaining: 900, // 15-minute inactivity TTL
+      officerTab: 'allocator',
+      activeHofTag: 'All',
+      activeModalAchievementId: null,
+
+      // Security & Anti-Brute-Force Architecture (3-attempt limit -> 30s lockout)
+      security: {
+        maxAttempts: 3,
+        failedAttempts: 0,
+        attemptsByTarget: {},
+        lockoutUntil: 0,
+        lockoutTimerId: null,
+        auditLogs: [
+          {
+            id: 'log-boot',
+            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+            event: 'SECURITY_BOOT',
+            severity: 'INFO',
+            email: 'albert.melodia@gmail.com',
+            fingerprint: 'CDO-XU-NODE-84A9',
+            tokenHash: 'SHA256:7E91C4B08F1A',
+            detail: 'Initialized strict @gmail.com policy, 3-strike brute-force limiter, and AES-256-GCM session engine.'
+          }
+        ]
+      },
+
+      presetTags: [
+        'All',
+        'Nationals',
+        'Regionals',
+        'International',
+        'Intervarsities',
+        'Championships'
+      ],
+
+      members: [
+        {
+          id: 'm1',
+          name: 'Albert Vinc A. Melodia',
+          email: 'albert.melodia@gmail.com',
+          password: 'Xdc@1996!',
+          isCoderRoot: true, // EXCLUSIVE CODER/OWNER ACCOUNT
+          isOfficer: true,
+          role: 'XDC Board of Director • Program & System Owner',
+          committee: 'External Ministry',
+          status: 'Active',
+          sparsDone: 8,
+          sparsReq: 8,
+          trainingDone: 6,
+          trainingReq: 6,
+          tournamentsDone: 3,
+          tournamentsReq: 2
+        },
+        {
+          id: 'm2',
+          name: 'Sofia Isabel Montemayor',
+          email: 'sofia.montemayor@gmail.com',
+          password: 'Xdc@1996!',
+          isCoderRoot: false,
+          isOfficer: true,
+          role: 'VP for Internal Affairs • Adjudication Core',
+          committee: 'Adjudication & Tabulation',
+          status: 'Active',
+          sparsDone: 7,
+          sparsReq: 8,
+          trainingDone: 6,
+          trainingReq: 6,
+          tournamentsDone: 2,
+          tournamentsReq: 2
+        },
+        {
+          id: 'm3',
+          name: 'Miguel Lorenzo Cabrera',
+          email: 'lorenzo.cabrera@gmail.com',
+          password: 'Xdc@1996!',
+          isCoderRoot: false,
+          isOfficer: true,
+          role: 'Tournament Director • Varsity Debater',
+          committee: 'Tournament & Externals',
+          status: 'Active',
+          sparsDone: 6,
+          sparsReq: 8,
+          trainingDone: 5,
+          trainingReq: 6,
+          tournamentsDone: 2,
+          tournamentsReq: 2
+        },
+        {
+          id: 'm4',
+          name: 'Hannah Amerol',
+          email: 'hannah.amerol@gmail.com',
+          password: 'Debate@2026!',
+          isCoderRoot: false,
+          isOfficer: false,
+          role: 'Varsity Debater • 10th MIV Grandfinalist',
+          committee: 'Training & Education',
+          status: 'Active',
+          sparsDone: 8,
+          sparsReq: 8,
+          trainingDone: 6,
+          trainingReq: 6,
+          tournamentsDone: 2,
+          tournamentsReq: 2
+        },
+        {
+          id: 'm5',
+          name: 'James Cachola',
+          email: 'james.cachola@gmail.com',
+          password: 'Debate@2026!',
+          isCoderRoot: false,
+          isOfficer: false,
+          role: 'Varsity Debater • 10th MIV Grandfinalist',
+          committee: 'Tournament & Externals',
+          status: 'Active',
+          sparsDone: 8,
+          sparsReq: 8,
+          trainingDone: 6,
+          trainingReq: 6,
+          tournamentsDone: 2,
+          tournamentsReq: 2
+        },
+        {
+          id: 'm6',
+          name: 'Camille Therese Uy',
+          email: 'camille.uy@gmail.com',
+          password: 'Debate@2026!',
+          isCoderRoot: false,
+          isOfficer: false,
+          role: 'Junior Varsity Debater',
+          committee: 'Finance & Logistics',
+          status: 'Probationary',
+          sparsDone: 4,
+          sparsReq: 8,
+          trainingDone: 4,
+          trainingReq: 6,
+          tournamentsDone: 1,
+          tournamentsReq: 2
+        }
+      ],
+
+      announcements: [
+        {
+          id: 'a1',
+          title: 'Mandatory Contingent Briefing & Motion Analysis for National Championship',
+          category: 'Urgent Directive',
+          audience: 'All Members',
+          body: 'All varsity speakers and breaking adjudicators must attend the 6:00 PM chamber calibration at STC 302. Bring updated matter files on Southeast Asian fiscal policy and judicial reform.',
+          author: 'Albert Vinc A. Melodia',
+          createdAt: 'Oct 10, 2026 • 2:15 PM',
+          pinned: true,
+          emailPing: true,
+          acknowledgedBy: ['m1', 'm2', 'm4']
+        },
+        {
+          id: 'a2',
+          title: 'Calicotab & Tabpuan Equity Matrix Updated for Friday Spar Night',
+          category: 'Training & Spar',
+          audience: 'Adjudication & Tabulation',
+          body: 'Adjudication Core members are requested to review the updated judge calibration brackets and submit panelist feedback forms within 15 minutes of oral adjudication.',
+          author: 'Sofia Isabel Montemayor',
+          createdAt: 'Oct 11, 2026 • 10:30 AM',
+          pinned: true,
+          emailPing: true,
+          acknowledgedBy: ['m1', 'm2']
+        },
+        {
+          id: 'a3',
+          title: 'First Semester General Assembly & 30th Anniversary Heritage Night',
+          category: 'General Assembly',
+          audience: 'All Members',
+          body: 'Celebrate 30 Years of Transcending Limits at the XU Little Theater. Formal or smart-casual attire in royal blue and gold is encouraged.',
+          author: 'Miguel Lorenzo Cabrera',
+          createdAt: 'Oct 12, 2026 • 4:00 PM',
+          pinned: false,
+          emailPing: false,
+          acknowledgedBy: ['m1', 'm3', 'm4', 'm5']
+        }
+      ],
+
+      tasks: [
+        {
+          id: 't1',
+          title: 'Prepare 10th MIV Post-Tournament Adjudication Brief & Case File',
+          assigneeType: 'committee',
+          assigneeValue: 'Training & Education',
+          assigneeLabel: 'Committee: Training & Education',
+          priority: 'High',
+          dueDate: '2026-10-12',
+          status: 'In Progress',
+          notes: 'Compile grand finals motion analysis with Hannah Amerol & James Cachola.',
+          emailPing: true
+        },
+        {
+          id: 't2',
+          title: 'Calibrate Calicotab & Tabpuan Judge Equity Matrix',
+          assigneeType: 'member',
+          assigneeValue: 'm1',
+          assigneeLabel: 'Albert Vinc A. Melodia',
+          priority: 'High',
+          dueDate: '2026-10-15',
+          status: 'To Do',
+          notes: 'Verify conflict-of-interest brackets prior to Friday Spar Night.',
+          emailPing: true
+        },
+        {
+          id: 't3',
+          title: 'Finalize Registration Roster for National Debate Championship',
+          assigneeType: 'committee',
+          assigneeValue: 'Tournament & Externals',
+          assigneeLabel: 'Committee: Tournament & Externals',
+          priority: 'Standard',
+          dueDate: '2026-10-19',
+          status: 'Completed',
+          notes: 'All contingent waivers and travel clearances verified.',
+          emailPing: false
+        }
+      ],
+
+      events: [
+        {
+          id: 'e1',
+          title: 'XDC First Semester General Assembly & Motto Briefing',
+          type: 'GA',
+          date: 'Oct 14, 2026 • 5:00 PM',
+          location: 'XU AVR 1, Old Library Building',
+          rsvpMemberIds: ['m1', 'm2', 'm3', 'm4', 'm5']
+        },
+        {
+          id: 'e2',
+          title: 'Weekly British Parliamentary (BP) Ranked Spar Night',
+          type: 'Spar',
+          date: 'Oct 16, 2026 • 6:00 PM',
+          location: 'STC 302 & 303 Chambers',
+          rsvpMemberIds: ['m1', 'm2', 'm4', 'm5']
+        },
+        {
+          id: 'e3',
+          title: 'Mindanao Parliamentary Championship Contingent Prep',
+          type: 'Tournament',
+          date: 'Oct 24–26, 2026 • 8:00 AM',
+          location: 'Xavier University Little Theater',
+          rsvpMemberIds: ['m1', 'm2', 'm3', 'm4', 'm5']
+        }
+      ]
+    };
+
+    function bytesToBase64Url(bytes) {
+      let binary = '';
+      for (let i = 0; i < bytes.length; i++) {
+        binary += String.fromCharCode(bytes[i]);
+      }
+      return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    }
+
+    function bytesToHex(bytes) {
+      return Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('').toUpperCase();
+    }
+
+    /**
+     * Generates an encrypted session token in the format:
+     * XDC-ENC-v1.<iv>.<ciphertext>.<sig>
+     * Uses Web Crypto AES-256-GCM + SHA-256 signature with synchronous fallback
+     */
+    async function issueEncryptedSessionToken(member, activeRole) {
+      const now = new Date();
+      const exp = new Date(now.getTime() + 15 * 60 * 1000);
+      state.sessionIssuedAt = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      state.sessionExpiresAt = exp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+      const payloadObj = {
+        sub: member.email,
+        uid: member.id,
+        role: activeRole,
+        root: Boolean(member.isCoderRoot),
+        fp: state.sessionFingerprint,
+        iat: now.getTime(),
+        exp: exp.getTime()
+      };
+      const payloadJson = JSON.stringify(payloadObj);
+
+      try {
+        if (window.crypto && window.crypto.subtle) {
+          const enc = new TextEncoder();
+          const rawKeyBytes = new Uint8Array(32);
+          window.crypto.getRandomValues(rawKeyBytes);
+          const ivBytes = new Uint8Array(12);
+          window.crypto.getRandomValues(ivBytes);
+
+          const cryptoKey = await window.crypto.subtle.importKey(
+            'raw',
+            rawKeyBytes,
+            { name: 'AES-GCM' },
+            false,
+            ['encrypt']
+          );
+
+          const encryptedBuffer = await window.crypto.subtle.encrypt(
+            { name: 'AES-GCM', iv: ivBytes },
+            cryptoKey,
+            enc.encode(payloadJson)
+          );
+
+          const ivPart = bytesToBase64Url(ivBytes);
+          const cipherPart = bytesToBase64Url(new Uint8Array(encryptedBuffer));
+
+          const sigInput = enc.encode(`XDC-ENC-v1.${ivPart}.${cipherPart}.${member.email}`);
+          const sigHashBuffer = await window.crypto.subtle.digest('SHA-256', sigInput);
+          const sigPart = bytesToBase64Url(new Uint8Array(sigHashBuffer)).slice(0, 28);
+
+          state.sessionToken = `XDC-ENC-v1.${ivPart}.${cipherPart}.${sigPart}`;
+          renderCoderSecurityConsole();
+          return state.sessionToken;
+        }
+      } catch (err) {
+        // Fallback deterministic format if subtle crypto is restricted
+      }
+
+      const randHex = len =>
+        Array.from({ length: len }, () => Math.floor(Math.random() * 16).toString(16)).join('');
+      const ivFallback = btoa(randHex(12)).replace(/=+$/, '');
+      const cipherFallback = btoa(unescape(encodeURIComponent(payloadJson))).replace(/=+$/, '');
+      const sigFallback = randHex(24).toUpperCase();
+      state.sessionToken = `XDC-ENC-v1.${ivFallback}.${cipherFallback}.${sigFallback}`;
+      renderCoderSecurityConsole();
+      return state.sessionToken;
+    }
+
+    function getShortTokenHash(tokenStr) {
+      if (!tokenStr) return 'NONE';
+      const parts = tokenStr.split('.');
+      const sig = parts[parts.length - 1] || tokenStr;
+      return `SHA256:${sig.slice(0, 12).toUpperCase()}`;
+    }
+
+    function isCurrentSessionCoderRoot() {
+      const activeMember = getActiveMember();
+      return (
+        state.role !== 'public' &&
+        activeMember &&
+        activeMember.isCoderRoot === true
+      );
+    }
+
+    function recordSecurityLog(eventCode, severity, email, detail) {
+      state.security.auditLogs.unshift({
+        id: 'log-' + Date.now() + '-' + Math.random().toString(36).substring(2, 6),
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+        event: eventCode,
+        severity, // 'CRITICAL' | 'WARNING' | 'SUCCESS' | 'INFO'
+        email: email || 'unauthenticated@client',
+        fingerprint: state.sessionFingerprint,
+        tokenHash: getShortTokenHash(state.sessionToken),
+        detail
+      });
+
+      const badge = document.getElementById('audit-log-count-badge');
+      if (badge) badge.textContent = String(state.security.auditLogs.length);
+      renderCoderSecurityConsole();
+    }
+
+    function scrollToCoderConsole() {
+      if (!isCurrentSessionCoderRoot()) return;
+      const el = document.getElementById('coder-root-security-console');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function renderCoderSecurityConsole() {
+      const consoleSection = document.getElementById('coder-root-security-console');
+      const topbarBtn = document.getElementById('coder-root-topbar-btn');
+      const isCoder = isCurrentSessionCoderRoot();
+
+      if (!isCoder) {
+        if (consoleSection) consoleSection.classList.add('hidden');
+        if (topbarBtn) topbarBtn.classList.add('hidden');
+        return;
+      }
+
+      if (consoleSection) consoleSection.classList.remove('hidden');
+      if (topbarBtn) topbarBtn.classList.remove('hidden');
+
+      const tokenDisplay = document.getElementById('coder-full-token-display');
+      const fpDisplay = document.getElementById('coder-session-fingerprint');
+      const iatDisplay = document.getElementById('coder-session-iat');
+      const expDisplay = document.getElementById('coder-session-exp');
+      const attemptsStat = document.getElementById('coder-failed-attempts-stat');
+      const totalCountEl = document.getElementById('coder-log-total-count');
+      const logStream = document.getElementById('coder-audit-log-stream');
+      const searchInput = document.getElementById('coder-audit-search');
+
+      if (tokenDisplay) tokenDisplay.textContent = state.sessionToken || 'Generating AES-256-GCM token...';
+      if (fpDisplay) fpDisplay.textContent = state.sessionFingerprint;
+      if (iatDisplay) iatDisplay.textContent = state.sessionIssuedAt || 'Active';
+      if (expDisplay) expDisplay.textContent = state.sessionExpiresAt || '+15m';
+      if (attemptsStat) {
+        const locked = state.security.lockoutUntil > Date.now();
+        attemptsStat.textContent = locked
+          ? `${state.security.failedAttempts} / ${state.security.maxAttempts} (LOCKED)`
+          : `${state.security.failedAttempts} / ${state.security.maxAttempts}`;
+      }
+      if (totalCountEl) totalCountEl.textContent = String(state.security.auditLogs.length);
+
+      if (!logStream) return;
+      const query = (searchInput ? searchInput.value : '').trim().toLowerCase();
+
+      const filteredLogs = state.security.auditLogs.filter(item => {
+        if (!query) return true;
+        const hay = `${item.event} ${item.severity} ${item.email} ${item.detail} ${item.tokenHash}`.toLowerCase();
+        return hay.includes(query);
+      });
+
+      logStream.innerHTML = filteredLogs.map(item => {
+        const sevStyles =
+          item.severity === 'CRITICAL'
+            ? 'bg-red-700 text-white border-red-800'
+            : item.severity === 'WARNING'
+            ? 'bg-amber-50 text-amber-800 border-amber-300'
+            : item.severity === 'SUCCESS'
+            ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
+            : 'bg-xdc-goldSoft text-xdc-royal border-xdc-gold/40';
+
+        return `
+          <div class="p-3.5 rounded-xl bg-xdc-slateBg border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+            <div class="space-y-1">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold border ${sevStyles}">
+                  ${escapeHtml(item.severity)}
+                </span>
+                <strong class="text-xdc-royal">${escapeHtml(item.event)}</strong>
+                <span class="text-slate-400 text-[11px]">${escapeHtml(item.time)}</span>
+                <span class="px-2 py-0.5 rounded bg-white border border-slate-200 text-[10px] text-slate-600 font-bold">
+                  Target: ${escapeHtml(item.email)}
+                </span>
+              </div>
+              <p class="text-xs text-slate-700">${escapeHtml(item.detail)}</p>
+            </div>
+            <div class="text-right shrink-0 text-[10px] text-slate-500 font-bold">
+              <div>FP: ${escapeHtml(item.fingerprint)}</div>
+              <div class="text-xdc-royal">${escapeHtml(item.tokenHash)}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function validateGmailInputLive() {
+      const input = document.getElementById('login-gmail-input');
+      const statusEl = document.getElementById('gmail-live-status');
+      if (!input || !statusEl) return false;
+
+      const val = (input.value || '').trim();
+      if (!val) {
+        statusEl.textContent = 'Strictly @gmail.com';
+        statusEl.className = 'text-[11px] font-bold text-slate-400';
+        return false;
+      }
+
+      if (STRICT_GMAIL_REGEX.test(val)) {
+        statusEl.textContent = '✓ Valid @gmail.com';
+        statusEl.className = 'text-[11px] font-bold text-emerald-600';
+        return true;
+      } else {
+        statusEl.textContent = '✕ Strictly @gmail.com only';
+        statusEl.className = 'text-[11px] font-bold text-red-600';
+        return false;
+      }
+    }
+
+    function updateSecurityAttemptsUI() {
+      const remaining = Math.max(0, state.security.maxAttempts - state.security.failedAttempts);
+      const badge = document.getElementById('security-attempts-badge');
+      const dot = document.getElementById('security-shield-dot');
+      const label = document.getElementById('security-status-label');
+      const submitBtn = document.getElementById('login-submit-btn');
+      const lockoutBanner = document.getElementById('login-lockout-banner');
+
+      const isLocked = state.security.lockoutUntil > Date.now();
+
+      if (badge) {
+        badge.textContent = `${remaining} / ${state.security.maxAttempts} Attempts Left`;
+      }
+
+      if (isLocked) {
+        if (dot) dot.className = 'w-2 h-2 rounded-full bg-red-600 animate-ping';
+        if (label) label.textContent = 'Brute-Force Lockout Engaged';
+        if (submitBtn) submitBtn.disabled = true;
+        if (lockoutBanner) lockoutBanner.classList.remove('hidden');
+      } else {
+        if (dot) dot.className = remaining === 1 ? 'w-2 h-2 rounded-full bg-amber-500' : 'w-2 h-2 rounded-full bg-emerald-500';
+        if (label) label.textContent = 'Brute-Force Rate Limit Active';
+        if (submitBtn) submitBtn.disabled = false;
+        if (lockoutBanner) lockoutBanner.classList.add('hidden');
+      }
+      renderCoderSecurityConsole();
+    }
+
+    function triggerBruteForceLockout(targetIdentifier) {
+      state.security.lockoutUntil = Date.now() + 30000; // 30-second lockout
+      updateSecurityAttemptsUI();
+
+      recordSecurityLog(
+        'BRUTE_FORCE_LOCKOUT',
+        'CRITICAL',
+        targetIdentifier || 'unknown@client',
+        '3 consecutive failed authentication attempts reached. Client locked out for 30 seconds.'
+      );
+
+      showAuthNotification({
+        title: 'BRUTE_FORCE_LOCKOUT (30s)',
+        subtitle: 'Rate-Limit Threshold Reached',
+        detail: '3 failed login attempts recorded. Authentication is locked for 30 seconds.',
+        variant: 'error'
+      });
+
+      if (state.security.lockoutTimerId) clearInterval(state.security.lockoutTimerId);
+      state.security.lockoutTimerId = setInterval(() => {
+        const secsLeft = Math.ceil((state.security.lockoutUntil - Date.now()) / 1000);
+        const timerEl = document.getElementById('lockout-countdown-timer');
+        if (secsLeft <= 0) {
+          clearInterval(state.security.lockoutTimerId);
+          state.security.lockoutTimerId = null;
+          state.security.failedAttempts = 0;
+          state.security.lockoutUntil = 0;
+          recordSecurityLog(
+            'LOCKOUT_EXPIRED',
+            'INFO',
+            targetIdentifier || 'client',
+            '30-second brute-force rate-limit cooldown expired; login form unlocked.'
+          );
+          setLoginFeedback('30-second brute-force lockout expired. You may now sign in with your @gmail.com credentials.', false);
+          updateSecurityAttemptsUI();
+        } else if (timerEl) {
+          timerEl.textContent = `${secsLeft}s`;
+        }
+      }, 250);
+    }
+
+    function simulateBruteForceAttack() {
+      if (!isCurrentSessionCoderRoot()) return;
+      state.security.failedAttempts = state.security.maxAttempts;
+      recordSecurityLog(
+        'SIMULATED_ATTACK_VECTOR',
+        'WARNING',
+        'intruder.bot@gmail.com',
+        'Coder Root triggered a simulated 3-attempt credential stuffing burst.'
+      );
+      triggerBruteForceLockout('intruder.bot@gmail.com');
+      showToast('Simulated 3 failed attempts — 30s brute-force lockout triggered.');
+    }
+
+    function clearAllBruteForceLockouts() {
+      if (!isCurrentSessionCoderRoot()) return;
+      if (state.security.lockoutTimerId) {
+        clearInterval(state.security.lockoutTimerId);
+        state.security.lockoutTimerId = null;
+      }
+      state.security.failedAttempts = 0;
+      state.security.lockoutUntil = 0;
+      state.security.attemptsByTarget = {};
+      updateSecurityAttemptsUI();
+      setLoginFeedback('', false);
+      recordSecurityLog(
+        'RATE_LIMIT_RESET',
+        'INFO',
+        'albert.melodia@gmail.com',
+        'Coder Root manually cleared all brute-force rate-limit counters and lockouts.'
+      );
+      showToast('All brute-force lockouts and rate-limit counters cleared.');
+    }
+
+    async function refreshSessionTTL() {
+      state.sessionSecondsRemaining = 900;
+      const m = getActiveMember();
+      if (m) {
+        await issueEncryptedSessionToken(m, state.role);
+        recordSecurityLog(
+          'SESSION_TOKEN_ROTATED',
+          'SUCCESS',
+          m.email,
+          `Issued rotated AES-256-GCM encrypted session token (${getShortTokenHash(state.sessionToken)}).`
+        );
+      }
+      updateSessionTimerUI();
+      showToast('Encrypted session token rotated and extended for 15 minutes.');
+    }
+
+    function updateSessionTimerUI() {
+      const ttlEl = document.getElementById('session-ttl-badge');
+      if (!ttlEl) return;
+      const mins = String(Math.floor(state.sessionSecondsRemaining / 60)).padStart(2, '0');
+      const secs = String(state.sessionSecondsRemaining % 60).padStart(2, '0');
+      ttlEl.textContent = `${mins}:${secs}`;
+    }
+
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function showToast(message) {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = 'pointer-events-auto bg-xdc-royal text-white px-4 py-3 rounded-xl shadow-lg border-l-4 border-xdc-gold text-xs font-bold flex items-center justify-between gap-3 transition-all duration-300';
+      toast.innerHTML = `
+        <span>${escapeHtml(message)}</span>
+        <button type="button" onclick="this.parentElement.remove()" class="text-xdc-gold hover:text-white font-bold">✕</button>
+      `;
+      container.appendChild(toast);
+      setTimeout(() => {
+        if (toast.parentElement) toast.remove();
+      }, 3600);
+    }
+
+    function showAuthNotification({ title, subtitle, detail, variant = 'success' }) {
+      const stack = document.getElementById('auth-notification-stack');
+      if (!stack) return;
+
+      const card = document.createElement('div');
+      const borderStyle =
+        variant === 'error'
+          ? 'border-red-600 bg-white text-slate-900'
+          : variant === 'info'
+          ? 'border-xdc-gold bg-white text-slate-900'
+          : 'border-emerald-600 bg-white text-slate-900';
+
+      const badgeStyle =
+        variant === 'error'
+          ? 'bg-red-50 text-red-700 border-red-200'
+          : variant === 'info'
+          ? 'bg-xdc-goldSoft text-xdc-royal border-xdc-gold/40'
+          : 'bg-emerald-50 text-emerald-800 border-emerald-200';
+
+      card.className = `pointer-events-auto rounded-xl border border-slate-200 border-l-4 ${borderStyle} p-4 shadow-xl transition-all duration-300`;
+      card.innerHTML = `
+        <div class="flex items-start justify-between gap-3">
+          <div class="space-y-1">
+            <span class="inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider border ${badgeStyle}">
+              ${escapeHtml(title)}
+            </span>
+            <div class="text-sm font-bold text-xdc-royal">${escapeHtml(subtitle)}</div>
+            <div class="text-xs text-slate-600">${escapeHtml(detail)}</div>
+          </div>
+          <button type="button" onclick="this.closest('div.pointer-events-auto').remove()" class="text-slate-400 hover:text-slate-700 font-bold text-xs">✕</button>
+        </div>
+      `;
+      stack.prepend(card);
+
+      setTimeout(() => {
+        if (card.parentElement) card.remove();
+      }, 5200);
+    }
+
+    function setLoginFeedback(message, isError = true) {
+      const box = document.getElementById('login-feedback-box');
+      if (!box) return;
+      if (!message) {
+        box.classList.add('hidden');
+        box.textContent = '';
+        return;
+      }
+      box.classList.remove('hidden');
+      box.className = `mb-4 p-3.5 rounded-lg border text-xs font-bold ${
+        isError
+          ? 'bg-red-50 border-red-300 text-red-800'
+          : 'bg-emerald-50 border-emerald-300 text-emerald-800'
+      }`;
+      box.textContent = message;
+    }
+
+    function togglePasswordVisibility() {
+      const input = document.getElementById('login-password-input');
+      const btn = document.getElementById('toggle-password-btn');
+      if (!input || !btn) return;
+      if (input.type === 'password') {
+        input.type = 'text';
+        btn.textContent = 'Hide Password';
+      } else {
+        input.type = 'password';
+        btn.textContent = 'Show Password';
+      }
+    }
+
+    function toggleTestAccountsModal() {
+      const modal = document.getElementById('test-accounts-modal');
+      if (!modal) return;
+      modal.classList.toggle('hidden');
+      renderTestAccountsList();
+    }
+
+    function renderTestAccountsList() {
+      const container = document.getElementById('test-accounts-list');
+      if (!container) return;
+      container.innerHTML = state.members.map(m => `
+        <div class="p-3 rounded-xl bg-xdc-slateBg border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+          <div>
+            <div class="flex flex-wrap items-center gap-1.5">
+              <strong class="text-xdc-royal">${escapeHtml(m.name)}</strong>
+              ${
+                m.isCoderRoot
+                  ? '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-xdc-gold text-white">🛡️ Coder Root (Audit Log Access)</span>'
+                  : m.isOfficer
+                  ? '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-xdc-royal text-white">Officer (No Audit Log)</span>'
+                  : '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-200 text-slate-700">Member Only</span>'
+              }
+            </div>
+            <div class="text-[11px] text-slate-600 mt-0.5">
+              Gmail: <code class="font-bold text-xdc-royal">${escapeHtml(m.email)}</code> •
+              Pass: <code class="font-bold text-xdc-royal">${escapeHtml(m.password)}</code>
+            </div>
+          </div>
+          <button
+            type="button"
+            onclick="autofillLoginCredentials('${m.id}')"
+            class="px-3 py-1.5 rounded-lg bg-xdc-royal text-white font-bold text-xs hover:bg-xdc-royalHover shrink-0"
+          >
+            Auto-Fill
+          </button>
+        </div>
+      `).join('');
+    }
+
+    function autofillLoginCredentials(memberId) {
+      const m = state.members.find(x => x.id === memberId);
+      if (!m) return;
+      switchRole('public');
+      const gmailInput = document.getElementById('login-gmail-input');
+      const pwInput = document.getElementById('login-password-input');
+
+      if (gmailInput) gmailInput.value = m.email;
+      if (pwInput) pwInput.value = m.password;
+      validateGmailInputLive();
+
+      const targetRole = m.isOfficer ? 'officer' : 'member';
+      const radio = document.querySelector(`input[name="loginRoleRadio"][value="${targetRole}"]`);
+      if (radio) radio.checked = true;
+
+      document.getElementById('test-accounts-modal').classList.add('hidden');
+      const loginSection = document.getElementById('portal-login');
+      if (loginSection) loginSection.scrollIntoView({ behavior: 'smooth' });
+      setLoginFeedback(`Auto-filled @gmail.com credentials for ${m.name} (${m.email}). Click "Sign In with Gmail".`, false);
+    }
+
+    function renderLogos() {
+      const slots = document.querySelectorAll('[data-xdc-logo]');
+      slots.forEach(slot => {
+        const variant = slot.getAttribute('data-xdc-logo') || 'shield';
+        slot.innerHTML = getOfficialXdcLogoSvg(variant);
+      });
+    }
+
+    function updateScrollParallaxCrest() {
+      const crest = document.getElementById('parallax-side-crest');
+      if (!crest) return;
+      const scrollY = window.scrollY || window.pageYOffset || 0;
+      const offset = -(scrollY * 0.16);
+      crest.style.transform = `translate3d(0, ${offset}px, 0)`;
+    }
+
+    function getActiveMember() {
+      return state.members.find(m => m.id === state.activeMemberId) || state.members[0];
+    }
+
+    function populateMemberSelectors() {
+      const previewSelect = document.getElementById('preview-member-select');
+      const optionsHtml = state.members.map(m => `
+        <option value="${escapeHtml(m.id)}" ${m.id === state.activeMemberId ? 'selected' : ''}>
+          ${escapeHtml(m.email)} (${m.isCoderRoot ? 'Coder Root' : m.isOfficer ? 'Officer' : 'Member'})
+        </option>
+      `).join('');
+      if (previewSelect) previewSelect.innerHTML = optionsHtml;
+    }
+
+    function populateTaskTargetDropdown() {
+      const select = document.getElementById('alloc-target');
+      if (!select) return;
+
+      const committees = [
+        'Training & Education',
+        'Adjudication & Tabulation',
+        'Tournament & Externals',
+        'Finance & Logistics',
+        'Publicity & Research',
+        'External Ministry'
+      ];
+
+      const memberOptions = state.members.map(m =>
+        `<option value="member:${escapeHtml(m.id)}">Member: ${escapeHtml(m.name)} (${escapeHtml(m.email)})</option>`
+      ).join('');
+
+      const committeeOptions = committees.map(c =>
+        `<option value="committee:${escapeHtml(c)}">Committee: ${escapeHtml(c)}</option>`
+      ).join('');
+
+      select.innerHTML = `
+        <optgroup label="Organization-Wide">
+          <option value="all:All Members">All XDC Members (Circle-Wide)</option>
+        </optgroup>
+        <optgroup label="Individual XDC Members">${memberOptions}</optgroup>
+        <optgroup label="XDC Committees">${committeeOptions}</optgroup>
+      `;
+    }
+
+    async function switchRole(newRole) {
+      state.role = newRole;
+
+      const roles = ['public', 'member', 'officer'];
+      roles.forEach(r => {
+        const btn = document.getElementById(`role-btn-${r}`);
+        if (!btn) return;
+        if (r === newRole) {
+          btn.className = 'px-3 py-1 rounded-md text-xs font-bold bg-xdc-royal text-white shadow-sm transition-all';
+        } else {
+          btn.className = 'px-3 py-1 rounded-md text-xs font-bold text-slate-600 hover:text-xdc-royal transition-all';
+        }
+      });
+
+      const publicView = document.getElementById('view-public');
+      const portalView = document.getElementById('view-portal');
+      const officerPanel = document.getElementById('officer-admin-panel');
+      const publicNav = document.getElementById('public-nav-links');
+      const loggedInNav = document.getElementById('logged-in-nav-actions');
+      const rolePill = document.getElementById('active-role-pill');
+      const memberPickerWrap = document.getElementById('preview-member-picker-wrap');
+
+      if (newRole === 'public') {
+        publicView.classList.remove('hidden');
+        portalView.classList.add('hidden');
+        officerPanel.classList.add('hidden');
+        publicNav.classList.remove('hidden');
+        loggedInNav.classList.add('hidden');
+        loggedInNav.classList.remove('flex');
+        memberPickerWrap.classList.add('hidden');
+        memberPickerWrap.classList.remove('lg:flex');
+      } else {
+        publicView.classList.add('hidden');
+        portalView.classList.remove('hidden');
+        publicNav.classList.add('hidden');
+        loggedInNav.classList.remove('hidden');
+        loggedInNav.classList.add('flex');
+        memberPickerWrap.classList.remove('hidden');
+        memberPickerWrap.classList.add('lg:flex');
+
+        const m = getActiveMember();
+        if (!state.sessionToken) {
+          await issueEncryptedSessionToken(m, newRole);
+        }
+
+        if (newRole === 'officer') {
+          officerPanel.classList.remove('hidden');
+          rolePill.textContent = m && m.isCoderRoot ? 'Officer View (Coder Root)' : 'Officer View Active';
+        } else {
+          officerPanel.classList.add('hidden');
+          rolePill.textContent = m && m.isCoderRoot ? 'Member View (Coder Root)' : 'Member View Active';
+        }
+      }
+
+      renderAll();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    async function changeActiveMember(memberId) {
+      state.activeMemberId = memberId;
+      state.lastLoginTimestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      state.sessionSecondsRemaining = 900;
+
+      const m = getActiveMember();
+      await issueEncryptedSessionToken(m, state.role);
+
+      // Update role pill text to reflect whether Coder Root is active
+      const rolePill = document.getElementById('active-role-pill');
+      if (rolePill && state.role !== 'public') {
+        rolePill.textContent =
+          state.role === 'officer'
+            ? m.isCoderRoot ? 'Officer View (Coder Root)' : 'Officer View Active'
+            : m.isCoderRoot ? 'Member View (Coder Root)' : 'Member View Active';
+      }
+
+      recordSecurityLog(
+        'SESSION_SWITCHED',
+        'INFO',
+        m.email,
+        `Switched active session to ${m.email} (${m.isCoderRoot ? 'Coder Root visible' : 'Coder Root hidden'}).`
+      );
+
+      renderAll();
+      showAuthNotification({
+        title: m.isCoderRoot ? 'Coder Root Session Active' : 'Session Switched',
+        subtitle: m.name,
+        detail: `${m.email} • ${m.isCoderRoot ? 'Security Audit Console Unlocked' : 'Standard Portal Access'}`,
+        variant: 'info'
+      });
+    }
+
+    async function handlePortalLogin(event) {
+      event.preventDefault();
+
+      // 1. Check Brute-Force Lockout Status
+      if (state.security.lockoutUntil > Date.now()) {
+        const secsLeft = Math.ceil((state.security.lockoutUntil - Date.now()) / 1000);
+        setLoginFeedback(`Authentication is locked due to brute-force rate limiting. Wait ${secsLeft}s.`, true);
+        return;
+      }
+
+      const gmailRaw = (document.getElementById('login-gmail-input').value || '').trim();
+      const passwordRaw = document.getElementById('login-password-input').value || '';
+      const roleRadio = document.querySelector('input[name="loginRoleRadio"]:checked');
+      const targetRole = roleRadio ? roleRadio.value : 'member';
+
+      // 2. Enforce Strict @gmail.com Format (Reject usernames, full names, or non-Gmail domains)
+      if (!STRICT_GMAIL_REGEX.test(gmailRaw)) {
+        state.security.failedAttempts += 1;
+        updateSecurityAttemptsUI();
+        recordSecurityLog(
+          'NON_GMAIL_REJECTED',
+          'WARNING',
+          gmailRaw || 'empty_input',
+          `Rejected login attempt: "${gmailRaw || '(empty)'}" does not match strict ^[a-zA-Z0-9._%+-]+@gmail\\.com$ policy.`
+        );
+        setLoginFeedback(
+          'Access Denied: Login strictly requires a valid @gmail.com address. Usernames, full names, and non-Gmail domains are rejected.',
+          true
+        );
+        showAuthNotification({
+          title: 'Strict @gmail.com Policy',
+          subtitle: 'Non-Gmail Identifier Rejected',
+          detail: 'Please sign in strictly using your registered @gmail.com address.',
+          variant: 'error'
+        });
+
+        if (state.security.failedAttempts >= state.security.maxAttempts) {
+          triggerBruteForceLockout(gmailRaw || 'non-gmail@client');
+        }
+        return;
+      }
+
+      // 3. Match Registered @gmail.com Account
+      const gmailNorm = gmailRaw.toLowerCase();
+      const matchedMember = state.members.find(m => m.email.toLowerCase() === gmailNorm);
+
+      if (!matchedMember) {
+        state.security.failedAttempts += 1;
+        updateSecurityAttemptsUI();
+        recordSecurityLog(
+          'UNREGISTERED_GMAIL',
+          'WARNING',
+          gmailRaw,
+          `Failed login: ${gmailRaw} is not registered in the XDC directory. (${state.security.failedAttempts}/${state.security.maxAttempts})`
+        );
+        setLoginFeedback(
+          `Authentication Failed: ${gmailRaw} is not registered. (${Math.max(0, state.security.maxAttempts - state.security.failedAttempts)} attempts left)`,
+          true
+        );
+        showAuthNotification({
+          title: 'Login Failed',
+          subtitle: 'Unregistered @gmail.com Address',
+          detail: `No XDC account found for ${gmailRaw}.`,
+          variant: 'error'
+        });
+
+        if (state.security.failedAttempts >= state.security.maxAttempts) {
+          triggerBruteForceLockout(gmailRaw);
+        }
+        return;
+      }
+
+      // 4. Verify Password
+      if (matchedMember.password !== passwordRaw) {
+        state.security.failedAttempts += 1;
+        updateSecurityAttemptsUI();
+        recordSecurityLog(
+          'INVALID_PASSWORD',
+          'WARNING',
+          matchedMember.email,
+          `Invalid password attempt for ${matchedMember.email}. (${state.security.failedAttempts}/${state.security.maxAttempts})`
+        );
+        setLoginFeedback(
+          `Incorrect password for ${matchedMember.email}. (${Math.max(0, state.security.maxAttempts - state.security.failedAttempts)} attempts left)`,
+          true
+        );
+        showAuthNotification({
+          title: 'Authentication Error',
+          subtitle: 'Incorrect Password',
+          detail: `Password verification failed for ${matchedMember.email}.`,
+          variant: 'error'
+        });
+
+        if (state.security.failedAttempts >= state.security.maxAttempts) {
+          triggerBruteForceLockout(matchedMember.email);
+        }
+        return;
+      }
+
+      // 5. Verify Officer Clearance if Officer View is requested
+      if (targetRole === 'officer' && !matchedMember.isOfficer) {
+        recordSecurityLog(
+          'ROLE_ESCALATION_BLOCKED',
+          'CRITICAL',
+          matchedMember.email,
+          `Unauthorized attempt by member ${matchedMember.email} to access Officer View.`
+        );
+        setLoginFeedback(
+          `${matchedMember.name} (${matchedMember.email}) does not have Officer clearance. Please select "Member View".`,
+          true
+        );
+        showAuthNotification({
+          title: 'Access Restricted',
+          subtitle: 'Officer Clearance Required',
+          detail: `${matchedMember.email} is authorized for Member View only.`,
+          variant: 'error'
+        });
+        return;
+      }
+
+      // 6. Successful Authentication -> Reset Brute-Force Counter & Issue Encrypted Session Token
+      state.security.failedAttempts = 0;
+      updateSecurityAttemptsUI();
+      setLoginFeedback('', false);
+
+      state.activeMemberId = matchedMember.id;
+      state.lastLoginTimestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      state.sessionSecondsRemaining = 900;
+
+      await issueEncryptedSessionToken(matchedMember, targetRole);
+
+      document.getElementById('login-password-input').value = '';
+
+      recordSecurityLog(
+        'GMAIL_AUTH_SUCCESS',
+        'SUCCESS',
+        matchedMember.email,
+        `Authenticated ${matchedMember.name} into ${targetRole.toUpperCase()} view with AES-256-GCM token ${getShortTokenHash(state.sessionToken)}.`
+      );
+
+      await switchRole(targetRole);
+
+      showAuthNotification({
+        title: matchedMember.isCoderRoot ? 'Coder Root Authenticated' : 'Verified Gmail Login',
+        subtitle: `Welcome, ${matchedMember.name}!`,
+        detail: `${matchedMember.email} • ${getShortTokenHash(state.sessionToken)} (${state.lastLoginTimestamp})`,
+        variant: 'success'
+      });
+      showToast(`Signed in as ${matchedMember.email}`);
+    }
+
+    function handleSignOut() {
+      const m = getActiveMember();
+      if (m) {
+        recordSecurityLog(
+          'SESSION_REVOKED_SIGNOUT',
+          'INFO',
+          m.email,
+          `Signed out and revoked encrypted session token ${getShortTokenHash(state.sessionToken)}.`
+        );
+      }
+      state.sessionToken = '';
+      switchRole('public');
+      showAuthNotification({
+        title: 'Signed Out',
+        subtitle: `${m ? m.email : 'Member'} logged out`,
+        detail: 'Your encrypted XDC session token has been revoked.',
+        variant: 'info'
+      });
+    }
+
+    function getAllUniqueTags() {
+      const dynamicTags = new Set(state.presetTags);
+      HALL_OF_FAME_DATA.forEach(item => {
+        (item.tags || []).forEach(t => dynamicTags.add(t));
+      });
+      return Array.from(dynamicTags);
+    }
+
+    function setHofTag(tag) {
+      state.activeHofTag = tag;
+      renderHallOfFame();
+    }
+
+    function renderHallOfFame() {
+      const filterBar = document.getElementById('hof-tag-filters');
+      const grid = document.getElementById('hof-photo-grid');
+      const searchInput = document.getElementById('hof-search-input');
+      if (!filterBar || !grid) return;
+
+      const allTags = getAllUniqueTags();
+      filterBar.innerHTML = allTags.map(tag => {
+        const isActive = state.activeHofTag === tag;
+        return `
+          <button
+            type="button"
+            onclick="setHofTag('${escapeHtml(tag)}')"
+            class="px-3.5 py-1.5 rounded-full text-xs font-bold border transition-all ${
+              isActive
+                ? 'bg-xdc-royal text-white border-xdc-royal shadow-sm'
+                : 'bg-white text-slate-700 border-slate-300 hover:border-xdc-royal hover:text-xdc-royal'
+            }"
+          >
+            ${escapeHtml(tag)}
+          </button>
+        `;
+      }).join('');
+
+      const query = (searchInput ? searchInput.value : '').trim().toLowerCase();
+
+      const filtered = HALL_OF_FAME_DATA.filter(item => {
+        const matchesTag =
+          state.activeHofTag === 'All' ||
+          (item.tags && item.tags.some(t => t.toLowerCase() === state.activeHofTag.toLowerCase()));
+
+        const haystack = [
+          item.tournament,
+          item.year,
+          item.people,
+          item.achievements,
+          item.whereHosted,
+          item.whoHosted,
+          ...(item.tags || [])
+        ].join(' ').toLowerCase();
+
+        const matchesQuery = !query || haystack.includes(query);
+        return matchesTag && matchesQuery;
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full bg-white rounded-xl border border-slate-200 p-10 text-center text-sm text-slate-500">
+            No achievements match this filter or search query.
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(item => `
+        <article
+          onclick="openAchievementModal('${item.id}')"
+          class="group card-photo-zoom cursor-pointer bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md hover:border-xdc-gold transition-all flex flex-col justify-between"
+        >
+          <div>
+            <!-- Sleek Read-Only Photo Container -->
+            <div class="relative h-48 bg-slate-900 overflow-hidden">
+              <img
+                src="${escapeHtml(item.photo)}"
+                alt="${escapeHtml(item.tournament)}"
+                class="achievement-img w-full h-full object-cover transition-transform duration-500"
+                onerror="this.src='https://placehold.co/800x500/08206B/C4922A?text=Xavier+Debate+Circle'"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-slate-950/15 to-transparent"></div>
+
+              <!-- Year Pill -->
+              <div class="absolute top-3 left-3">
+                <span class="px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-xdc-royal/90 text-white border border-xdc-gold/50">
+                  ${escapeHtml(item.year)}
+                </span>
+              </div>
+
+              <!-- Multi-Tag Badges on Photo Bottom -->
+              <div class="absolute bottom-2.5 left-3 right-3 flex flex-wrap gap-1">
+                ${(item.tags || []).map(tag => `
+                  <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-xdc-gold text-white shadow-sm">
+                    ${escapeHtml(tag)}
+                  </span>
+                `).join('')}
+              </div>
+            </div>
+
+            <!-- Card Summary Body -->
+            <div class="p-5">
+              <h3 class="text-lg font-bold text-xdc-royal group-hover:text-xdc-royalHover leading-snug mb-1.5">
+                ${escapeHtml(item.tournament)}
+              </h3>
+              <p class="text-xs font-bold text-slate-700 line-clamp-2 mb-2">
+                🏆 ${escapeHtml(item.achievements)}
+              </p>
+              <p class="text-xs text-slate-500 line-clamp-1">
+                📍 ${escapeHtml(item.whereHosted)}
+              </p>
+            </div>
+          </div>
+
+          <!-- Click-to-Reveal Footer Prompt -->
+          <div class="px-5 py-3 bg-xdc-slateBg border-t border-slate-100 flex items-center justify-between text-xs font-bold text-xdc-royal group-hover:bg-xdc-goldSoft transition-colors">
+            <span>Click to reveal full achievement details</span>
+            <span class="text-xdc-gold group-hover:translate-x-1 transition-transform">→</span>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    function openAchievementModal(achievementId) {
+      const item = HALL_OF_FAME_DATA.find(x => x.id === achievementId);
+      if (!item) return;
+
+      state.activeModalAchievementId = item.id;
+
+      document.getElementById('modal-achievement-img').src = item.photo;
+      document.getElementById('modal-achievement-tournament').textContent = `${item.tournament} (${item.year})`;
+      document.getElementById('modal-detail-people').textContent = item.people;
+      document.getElementById('modal-detail-achievements').textContent = item.achievements;
+      document.getElementById('modal-detail-where').textContent = item.whereHosted;
+      document.getElementById('modal-detail-who').textContent = item.whoHosted;
+
+      const tagsWrap = document.getElementById('modal-achievement-tags');
+      tagsWrap.innerHTML = (item.tags || []).map(tag => `
+        <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-xdc-gold text-white shadow-sm">
+          ${escapeHtml(tag)}
+        </span>
+      `).join('');
+
+      const modal = document.getElementById('achievement-detail-modal');
+      modal.classList.remove('hidden');
+    }
+
+    function closeAchievementModal() {
+      document.getElementById('achievement-detail-modal').classList.add('hidden');
+      state.activeModalAchievementId = null;
+    }
+
+    function handleModalBackdropClick(event) {
+      if (event.target.id === 'achievement-detail-modal') {
+        closeAchievementModal();
+      }
+    }
+
+    function renderPortalAnnouncements() {
+      const m = getActiveMember();
+      const container = document.getElementById('portal-announcements-container');
+      const countBadge = document.getElementById('portal-announcements-count');
+      const quickBar = document.getElementById('officer-announcement-quick-bar');
+      const taskQuickBtn = document.getElementById('officer-task-quick-btn');
+
+      if (quickBar) {
+        if (state.role === 'officer') {
+          quickBar.classList.remove('hidden');
+          quickBar.classList.add('flex');
+        } else {
+          quickBar.classList.add('hidden');
+          quickBar.classList.remove('flex');
+        }
+      }
+
+      if (taskQuickBtn) {
+        if (state.role === 'officer') {
+          taskQuickBtn.classList.remove('hidden');
+        } else {
+          taskQuickBtn.classList.add('hidden');
+        }
+      }
+
+      if (!container || !m) return;
+
+      // Filter announcements relevant to the active member (or show all if in Officer View)
+      const visibleAnnouncements = [...state.announcements]
+        .filter(a =>
+          state.role === 'officer' ||
+          a.audience === 'All Members' ||
+          a.audience === m.committee
+        )
+        .sort((a, b) => Number(Boolean(b.pinned)) - Number(Boolean(a.pinned)));
+
+      if (countBadge) {
+        countBadge.textContent = `${visibleAnnouncements.length} Active`;
+      }
+
+      if (visibleAnnouncements.length === 0) {
+        container.innerHTML = `
+          <div class="p-6 rounded-xl bg-xdc-slateBg border border-slate-200 text-center text-xs text-slate-500">
+            No active announcements for your committee right now.
+          </div>
+        `;
+        return;
+      }
+
+      const catBadgeStyles = {
+        'Urgent Directive': 'bg-red-700 text-white',
+        'General Assembly': 'bg-xdc-royal text-white',
+        'Tournament Notice': 'bg-emerald-700 text-white',
+        'Training & Spar': 'bg-xdc-gold text-white',
+        'Committee Memo': 'bg-slate-700 text-white'
+      };
+
+      container.innerHTML = visibleAnnouncements.map(a => {
+        const isAck = (a.acknowledgedBy || []).includes(m.id);
+        const catStyle = catBadgeStyles[a.category] || 'bg-xdc-royal text-white';
+
+        return `
+          <div class="p-4 rounded-xl ${a.pinned ? 'bg-xdc-goldSoft/60 border-2 border-xdc-gold/60' : 'bg-xdc-slateBg border border-slate-200'} flex flex-col justify-between gap-3 transition-all">
+            <div class="space-y-1.5">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <div class="flex flex-wrap items-center gap-1.5">
+                  ${a.pinned ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-xdc-gold text-white">📌 Pinned</span>` : ''}
+                  <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${catStyle}">
+                    ${escapeHtml(a.category)}
+                  </span>
+                  <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-white border border-slate-200 text-xdc-royal">
+                    Audience: ${escapeHtml(a.audience)}
+                  </span>
+                  ${a.emailPing ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-white border border-xdc-gold/40 text-xdc-royal">✉ Gmail Broadcast</span>` : ''}
+                </div>
+                <span class="text-[11px] text-slate-500 font-bold">
+                  ${escapeHtml(a.createdAt)} • By ${escapeHtml(a.author)}
+                </span>
+              </div>
+
+              <h3 class="text-base font-bold text-xdc-royal">${escapeHtml(a.title)}</h3>
+              <p class="text-xs text-slate-700 leading-relaxed">${escapeHtml(a.body)}</p>
+            </div>
+
+            <div class="pt-2 border-t border-slate-200/80 flex flex-wrap items-center justify-between gap-2">
+              <button
+                type="button"
+                onclick="toggleAcknowledgeAnnouncement('${a.id}')"
+                class="px-3 py-1 rounded-lg text-[11px] font-bold border transition-all ${
+                  isAck
+                    ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
+                    : 'bg-white text-xdc-royal border-slate-300 hover:border-xdc-royal'
+                }"
+              >
+                ${isAck ? `✓ Acknowledged (${(a.acknowledgedBy || []).length})` : `Acknowledge Directive (${(a.acknowledgedBy || []).length})`}
+              </button>
+
+              ${
+                state.role === 'officer'
+                  ? `
+                <div class="flex flex-wrap items-center gap-1.5">
+                  <button
+                    type="button"
+                    onclick="startEditAnnouncement('${a.id}')"
+                    class="px-2.5 py-1 rounded bg-white border border-slate-300 text-[11px] font-bold text-xdc-royal hover:border-xdc-royal"
+                  >
+                    ✎ Edit
+                  </button>
+                  <button
+                    type="button"
+                    onclick="togglePinAnnouncement('${a.id}')"
+                    class="px-2.5 py-1 rounded bg-white border border-slate-300 text-[11px] font-bold text-xdc-gold hover:border-xdc-gold"
+                  >
+                    ${a.pinned ? 'Unpin' : '📌 Pin'}
+                  </button>
+                  <button
+                    type="button"
+                    onclick="duplicateAnnouncement('${a.id}')"
+                    class="px-2.5 py-1 rounded bg-white border border-slate-300 text-[11px] font-bold text-slate-700 hover:border-slate-500"
+                  >
+                    Clone
+                  </button>
+                  <button
+                    type="button"
+                    onclick="rePingAnnouncement('${a.id}')"
+                    class="px-2.5 py-1 rounded bg-xdc-goldSoft border border-xdc-gold/40 text-[11px] font-bold text-xdc-royal hover:bg-xdc-gold hover:text-white transition-colors"
+                  >
+                    ✉ Ping
+                  </button>
+                  <button
+                    type="button"
+                    onclick="deleteAnnouncement('${a.id}')"
+                    class="px-2.5 py-1 rounded bg-red-50 border border-red-200 text-[11px] font-bold text-red-700 hover:bg-red-100"
+                  >
+                    Remove
+                  </button>
+                </div>
+              `
+                  : ''
+              }
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderMemberDashboard() {
+      const m = getActiveMember();
+      if (!m) return;
+
+      renderPortalAnnouncements();
+
+      // Active Session Banner
+      const bannerText = document.getElementById('session-banner-text');
+      const bannerTime = document.getElementById('session-banner-time');
+      if (bannerText) {
+        bannerText.textContent = `${m.name} (${m.email}) • ${state.role === 'officer' ? 'Officer View' : 'Member View'}`;
+      }
+      if (bannerTime) {
+        bannerTime.textContent = `Logged in: ${state.lastLoginTimestamp}`;
+      }
+
+      document.getElementById('portal-profile-name').textContent = m.name;
+      document.getElementById('portal-profile-role').textContent = m.role;
+      document.getElementById('portal-profile-committee').textContent = m.committee;
+      document.getElementById('portal-profile-credentials').textContent = `Verified Gmail: ${m.email}`;
+      updateSessionTimerUI();
+
+      const clearanceBadge = document.getElementById('portal-clearance-badge');
+      if (clearanceBadge) {
+        clearanceBadge.textContent = m.isCoderRoot
+          ? '🛡️ Coder Root & Officer'
+          : m.isOfficer
+          ? 'Officer Clearance'
+          : 'Member Access';
+      }
+
+      const statusBadge = document.getElementById('portal-status-badge');
+      const statusStyles = {
+        'Active': 'bg-emerald-50 text-emerald-800 border-emerald-300',
+        'Probationary': 'bg-amber-50 text-amber-800 border-amber-300',
+        'On Leave': 'bg-slate-100 text-slate-700 border-slate-300',
+        'Alumni': 'bg-indigo-50 text-indigo-800 border-indigo-300'
+      };
+      statusBadge.className = `px-3 py-0.5 rounded-full text-xs font-bold border ${statusStyles[m.status] || statusStyles['Active']}`;
+      statusBadge.textContent = m.status;
+
+      // Quotas Progress Bars
+      const sparPct = Math.min(100, Math.round((m.sparsDone / Math.max(1, m.sparsReq)) * 100));
+      const trainPct = Math.min(100, Math.round((m.trainingDone / Math.max(1, m.trainingReq)) * 100));
+      const tournPct = Math.min(100, Math.round((m.tournamentsDone / Math.max(1, m.tournamentsReq)) * 100));
+
+      document.getElementById('quota-spars-label').textContent = `${m.sparsDone} / ${m.sparsReq} (${sparPct}%)`;
+      document.getElementById('quota-spars-bar').style.width = `${sparPct}%`;
+
+      document.getElementById('quota-training-label').textContent = `${m.trainingDone} / ${m.trainingReq} (${trainPct}%)`;
+      document.getElementById('quota-training-bar').style.width = `${trainPct}%`;
+
+      document.getElementById('quota-tournaments-label').textContent = `${m.tournamentsDone} / ${m.tournamentsReq} (${tournPct}%)`;
+      document.getElementById('quota-tournaments-bar').style.width = `${tournPct}%`;
+
+      const allComplete = m.sparsDone >= m.sparsReq && m.trainingDone >= m.trainingReq && m.tournamentsDone >= m.tournamentsReq;
+      const summaryPill = document.getElementById('quota-summary-pill');
+      if (allComplete) {
+        summaryPill.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200';
+        summaryPill.textContent = 'Cleared';
+      } else {
+        summaryPill.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200';
+        summaryPill.textContent = 'In Progress';
+      }
+
+      // Member Tasks (includes tasks assigned to this member, their committee, or All Members)
+      const myTasks = state.tasks.filter(t =>
+        t.assigneeType === 'all' ||
+        (t.assigneeType === 'member' && t.assigneeValue === m.id) ||
+        (t.assigneeType === 'committee' && t.assigneeValue === m.committee)
+      );
+
+      document.getElementById('member-task-count').textContent = `${myTasks.length} Assigned`;
+
+      const tasksWrap = document.getElementById('member-tasks-container');
+      if (myTasks.length === 0) {
+        tasksWrap.innerHTML = `
+          <div class="p-6 rounded-xl bg-xdc-slateBg border border-slate-200 text-center text-xs text-slate-500">
+            No tasks assigned to you or the ${escapeHtml(m.committee)} committee right now.
+          </div>
+        `;
+      } else {
+        const priorityStyles = {
+          'High': 'bg-red-50 text-red-700 border-red-200',
+          'Standard': 'bg-xdc-goldSoft text-xdc-royal border-xdc-gold/40',
+          'Low': 'bg-slate-100 text-slate-600 border-slate-200'
+        };
+
+        tasksWrap.innerHTML = myTasks.map(t => {
+          const statuses = ['To Do', 'In Progress', 'Completed'];
+          const pStyle = priorityStyles[t.priority || 'Standard'] || priorityStyles['Standard'];
+          return `
+            <div class="p-4 rounded-xl bg-xdc-slateBg border border-slate-200 flex flex-col justify-between gap-3">
+              <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+                <div>
+                  <div class="flex flex-wrap items-center gap-1.5 mb-1">
+                    <span class="text-sm font-bold text-xdc-royal">${escapeHtml(t.title)}</span>
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold border ${pStyle}">
+                      ${escapeHtml(t.priority || 'Standard')}
+                    </span>
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-white border border-slate-200 text-slate-600">
+                      Due: ${escapeHtml(t.dueDate)}
+                    </span>
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-white border border-slate-200 text-xdc-royal">
+                      ${escapeHtml(t.assigneeLabel)}
+                    </span>
+                    ${t.emailPing ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-xdc-goldSoft text-xdc-royal border border-xdc-gold/40">✉ Gmail Pinged</span>` : ''}
+                  </div>
+                  <p class="text-xs text-slate-600">${escapeHtml(t.notes || '')}</p>
+                </div>
+
+                <!-- Status Toggles: To Do, In Progress, Completed -->
+                <div class="flex items-center gap-1 bg-white p-1 rounded-lg border border-slate-200 shrink-0">
+                  ${statuses.map(st => {
+                    const active = t.status === st;
+                    return `
+                      <button
+                        type="button"
+                        onclick="updateTaskStatus('${t.id}', '${st}')"
+                        class="px-2.5 py-1 rounded text-[11px] font-bold transition-all ${
+                          active
+                            ? 'bg-xdc-royal text-white shadow-sm'
+                            : 'text-slate-600 hover:text-xdc-royal'
+                        }"
+                      >
+                        ${st}
+                      </button>
+                    `;
+                  }).join('')}
+                </div>
+              </div>
+
+              ${
+                state.role === 'officer'
+                  ? `
+                <div class="pt-2 border-t border-slate-200/80 flex flex-wrap items-center justify-end gap-1.5">
+                  <button
+                    type="button"
+                    onclick="startEditTask('${t.id}')"
+                    class="px-2.5 py-1 rounded bg-white border border-slate-300 text-[11px] font-bold text-xdc-royal hover:border-xdc-royal"
+                  >
+                    ✎ Edit Task
+                  </button>
+                  <button
+                    type="button"
+                    onclick="duplicateTask('${t.id}')"
+                    class="px-2.5 py-1 rounded bg-white border border-slate-300 text-[11px] font-bold text-slate-700 hover:border-slate-500"
+                  >
+                    Clone
+                  </button>
+                  <button
+                    type="button"
+                    onclick="rePingTask('${t.id}')"
+                    class="px-2.5 py-1 rounded bg-xdc-goldSoft border border-xdc-gold/40 text-[11px] font-bold text-xdc-royal hover:bg-xdc-gold hover:text-white transition-colors"
+                  >
+                    ✉ Ping
+                  </button>
+                  <button
+                    type="button"
+                    onclick="deleteTask('${t.id}')"
+                    class="px-2.5 py-1 rounded bg-red-50 border border-red-200 text-[11px] font-bold text-red-700 hover:bg-red-100"
+                  >
+                    Remove
+                  </button>
+                </div>
+              `
+                  : ''
+              }
+            </div>
+          `;
+        }).join('');
+      }
+
+      // Upcoming Events Board
+      const eventsGrid = document.getElementById('portal-events-grid');
+      eventsGrid.innerHTML = state.events.map(ev => {
+        const isGoing = (ev.rsvpMemberIds || []).includes(m.id);
+        const badgeColor =
+          ev.type === 'GA'
+            ? 'bg-xdc-royal text-white'
+            : ev.type === 'Spar'
+            ? 'bg-xdc-gold text-white'
+            : 'bg-emerald-700 text-white';
+
+        return `
+          <div class="p-4 rounded-xl bg-xdc-slateBg border border-slate-200 flex flex-col justify-between gap-3">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-2">
+                <span class="px-2.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${badgeColor}">
+                  ${escapeHtml(ev.type)}
+                </span>
+                <span class="text-[11px] font-bold text-slate-500">
+                  ${(ev.rsvpMemberIds || []).length} Attending
+                </span>
+              </div>
+              <h3 class="text-sm font-bold text-xdc-royal mb-1">${escapeHtml(ev.title)}</h3>
+              <p class="text-xs text-slate-600">📅 ${escapeHtml(ev.date)}</p>
+              <p class="text-xs text-slate-600">📍 ${escapeHtml(ev.location)}</p>
+            </div>
+
+            <button
+              type="button"
+              onclick="toggleEventRsvp('${ev.id}')"
+              class="w-full py-1.5 px-3 rounded-lg text-xs font-bold border transition-all ${
+                isGoing
+                  ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
+                  : 'bg-white text-xdc-royal border-slate-300 hover:border-xdc-royal'
+              }"
+            >
+              ${isGoing ? '✓ Going (Click to Cancel)' : 'RSVP Attendance'}
+            </button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function updateTaskStatus(taskId, newStatus) {
+      const t = state.tasks.find(x => x.id === taskId);
+      if (!t) return;
+      t.status = newStatus;
+      renderAll();
+      showToast(`Task status updated to "${newStatus}"`);
+    }
+
+    function toggleEventRsvp(eventId) {
+      const ev = state.events.find(x => x.id === eventId);
+      const m = getActiveMember();
+      if (!ev || !m) return;
+
+      const idx = ev.rsvpMemberIds.indexOf(m.id);
+      if (idx >= 0) {
+        ev.rsvpMemberIds.splice(idx, 1);
+        showToast(`Removed RSVP for ${ev.title}`);
+      } else {
+        ev.rsvpMemberIds.push(m.id);
+        showToast(`Confirmed attendance for ${ev.title}`);
+      }
+      renderAll();
+    }
+
+    function switchOfficerTab(tabName) {
+      state.officerTab = tabName;
+      const tabs = ['allocator', 'announcements', 'directory', 'editor'];
+
+      tabs.forEach(t => {
+        const btn = document.getElementById(`tab-btn-${t}`);
+        const panel = document.getElementById(`officer-tab-${t}`);
+        if (!btn || !panel) return;
+
+        if (t === tabName) {
+          btn.className = 'px-3 py-1.5 rounded-md text-xs font-bold bg-xdc-royal text-white shadow-sm transition-all';
+          panel.classList.remove('hidden');
+        } else {
+          btn.className = 'px-3 py-1.5 rounded-md text-xs font-bold text-slate-600 hover:text-xdc-royal transition-all';
+          panel.classList.add('hidden');
+        }
+      });
+    }
+
+    function openOfficerTaskEditorNew() {
+      switchOfficerTab('allocator');
+      resetTaskForm();
+      const panel = document.getElementById('officer-admin-panel');
+      if (panel) panel.scrollIntoView({ behavior: 'smooth' });
+      const titleInput = document.getElementById('alloc-title');
+      if (titleInput) titleInput.focus();
+    }
+
+    function handleSaveTask(event) {
+      event.preventDefault();
+      const editId = document.getElementById('alloc-edit-id').value;
+      const title = document.getElementById('alloc-title').value.trim();
+      const targetRaw = document.getElementById('alloc-target').value;
+      const dueDate = document.getElementById('alloc-due').value;
+      const priority = document.getElementById('alloc-priority').value || 'Standard';
+      const status = document.getElementById('alloc-status').value || 'To Do';
+      const notes = document.getElementById('alloc-notes').value.trim();
+      const emailPing = document.getElementById('alloc-email-ping').checked;
+
+      if (!title || !targetRaw) return;
+
+      const [assigneeType, assigneeValue] = targetRaw.split(':');
+      let assigneeLabel = assigneeValue;
+      if (assigneeType === 'member') {
+        const found = state.members.find(m => m.id === assigneeValue);
+        if (found) assigneeLabel = found.name;
+      } else if (assigneeType === 'all') {
+        assigneeLabel = 'All XDC Members';
+      } else {
+        assigneeLabel = `Committee: ${assigneeValue}`;
+      }
+
+      if (editId) {
+        const existing = state.tasks.find(t => t.id === editId);
+        if (existing) {
+          existing.title = title;
+          existing.assigneeType = assigneeType;
+          existing.assigneeValue = assigneeValue;
+          existing.assigneeLabel = assigneeLabel;
+          existing.dueDate = dueDate;
+          existing.priority = priority;
+          existing.status = status;
+          existing.notes = notes;
+          existing.emailPing = emailPing;
+          recordSecurityLog(
+            'TASK_UPDATED',
+            'INFO',
+            getActiveMember().email,
+            `Officer updated task "${title}" assigned to ${assigneeLabel}.`
+          );
+          showToast(
+            emailPing
+              ? `Updated task "${title}" + Gmail notification sent to ${assigneeLabel}!`
+              : `Updated task "${title}".`
+          );
+        }
+      } else {
+        state.tasks.unshift({
+          id: 't' + Date.now(),
+          title,
+          assigneeType,
+          assigneeValue,
+          assigneeLabel,
+          priority,
+          dueDate,
+          status,
+          notes,
+          emailPing
+        });
+        recordSecurityLog(
+          'TASK_CREATED',
+          'SUCCESS',
+          getActiveMember().email,
+          `Officer created task "${title}" for ${assigneeLabel}.`
+        );
+        showToast(
+          emailPing
+            ? `Task allocated to ${assigneeLabel} + Automated Gmail Ping sent!`
+            : `Task allocated to ${assigneeLabel}.`
+        );
+      }
+
+      resetTaskForm();
+      renderAll();
+    }
+
+    function startEditTask(taskId) {
+      const t = state.tasks.find(x => x.id === taskId);
+      if (!t) return;
+      switchOfficerTab('allocator');
+
+      document.getElementById('alloc-edit-id').value = t.id;
+      document.getElementById('alloc-title').value = t.title;
+      document.getElementById('alloc-target').value = `${t.assigneeType}:${t.assigneeValue}`;
+      document.getElementById('alloc-due').value = t.dueDate;
+      document.getElementById('alloc-priority').value = t.priority || 'Standard';
+      document.getElementById('alloc-status').value = t.status || 'To Do';
+      document.getElementById('alloc-notes').value = t.notes || '';
+      document.getElementById('alloc-email-ping').checked = Boolean(t.emailPing);
+
+      document.getElementById('task-form-heading').textContent = 'Edit Existing Task';
+      document.getElementById('task-submit-btn').textContent = 'Save Task Changes';
+      document.getElementById('task-cancel-edit-btn').classList.remove('hidden');
+
+      const formEl = document.getElementById('officer-task-form');
+      if (formEl) formEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      showToast(`Editing task: "${t.title}"`);
+    }
+
+    function resetTaskForm() {
+      const editId = document.getElementById('alloc-edit-id');
+      if (!editId) return;
+      editId.value = '';
+      document.getElementById('alloc-title').value = '';
+      document.getElementById('alloc-notes').value = '';
+      document.getElementById('alloc-priority').value = 'Standard';
+      document.getElementById('alloc-status').value = 'To Do';
+      document.getElementById('alloc-email-ping').checked = true;
+
+      document.getElementById('task-form-heading').textContent = 'Assign New Task';
+      document.getElementById('task-submit-btn').textContent = 'Allocate Task';
+      document.getElementById('task-cancel-edit-btn').classList.add('hidden');
+    }
+
+    function updateTaskPriority(taskId, newPriority) {
+      const t = state.tasks.find(x => x.id === taskId);
+      if (!t) return;
+      t.priority = newPriority;
+      renderAll();
+      showToast(`Task priority updated to "${newPriority}".`);
+    }
+
+    function duplicateTask(taskId) {
+      const orig = state.tasks.find(x => x.id === taskId);
+      if (!orig) return;
+      state.tasks.unshift({
+        ...orig,
+        id: 't' + Date.now(),
+        title: `${orig.title} (Copy)`
+      });
+      renderAll();
+      showToast(`Duplicated task "${orig.title}".`);
+    }
+
+    function rePingTask(taskId) {
+      const t = state.tasks.find(x => x.id === taskId);
+      if (!t) return;
+      t.emailPing = true;
+      recordSecurityLog(
+        'TASK_GMAIL_PING',
+        'INFO',
+        getActiveMember().email,
+        `Dispatched Gmail reminder ping for task "${t.title}" to ${t.assigneeLabel}.`
+      );
+      renderAll();
+      showAuthNotification({
+        title: 'Gmail Reminder Dispatched',
+        subtitle: t.title,
+        detail: `Sent automated email reminder to ${t.assigneeLabel} (Due: ${t.dueDate}).`,
+        variant: 'info'
+      });
+    }
+
+    function deleteTask(taskId) {
+      const target = state.tasks.find(t => t.id === taskId);
+      state.tasks = state.tasks.filter(t => t.id !== taskId);
+      if (document.getElementById('alloc-edit-id')?.value === taskId) {
+        resetTaskForm();
+      }
+      if (target) {
+        recordSecurityLog(
+          'TASK_REMOVED',
+          'WARNING',
+          getActiveMember().email,
+          `Officer removed task "${target.title}".`
+        );
+      }
+      renderAll();
+      showToast('Task removed from registry.');
+    }
+
+    function clearCompletedTasks() {
+      const beforeCount = state.tasks.length;
+      state.tasks = state.tasks.filter(t => t.status !== 'Completed');
+      const removed = beforeCount - state.tasks.length;
+      renderAll();
+      showToast(removed > 0 ? `Cleared ${removed} completed task(s).` : 'No completed tasks to clear.');
+    }
+
+    function renderOfficerTasksList() {
+      const list = document.getElementById('officer-all-tasks-list');
+      const countEl = document.getElementById('officer-total-tasks-count');
+      if (countEl) countEl.textContent = String(state.tasks.length);
+      if (!list) return;
+
+      const searchVal = (document.getElementById('officer-task-search')?.value || '').trim().toLowerCase();
+      const statusFilter = document.getElementById('officer-task-status-filter')?.value || 'All';
+      const priorityFilter = document.getElementById('officer-task-priority-filter')?.value || 'All';
+
+      const filtered = state.tasks.filter(t => {
+        const matchesStatus = statusFilter === 'All' || t.status === statusFilter;
+        const matchesPriority = priorityFilter === 'All' || (t.priority || 'Standard') === priorityFilter;
+        const hay = `${t.title} ${t.notes || ''} ${t.assigneeLabel} ${t.dueDate}`.toLowerCase();
+        const matchesSearch = !searchVal || hay.includes(searchVal);
+        return matchesStatus && matchesPriority && matchesSearch;
+      });
+
+      if (filtered.length === 0) {
+        list.innerHTML = `
+          <div class="p-6 rounded-xl bg-xdc-slateBg border border-slate-200 text-center text-xs text-slate-500">
+            No tasks match the current filter criteria.
+          </div>
+        `;
+        return;
+      }
+
+      const statuses = ['To Do', 'In Progress', 'Completed'];
+      const priorities = ['High', 'Standard', 'Low'];
+
+      list.innerHTML = filtered.map(t => `
+        <div class="p-4 rounded-xl bg-xdc-slateBg border border-slate-200 space-y-2.5">
+          <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-2">
+            <div>
+              <div class="flex flex-wrap items-center gap-1.5">
+                <span class="text-xs font-bold text-xdc-royal">${escapeHtml(t.title)}</span>
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-white border border-slate-200 text-slate-700">
+                  ${escapeHtml(t.assigneeLabel)}
+                </span>
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-white border border-slate-200 text-slate-500">
+                  Due: ${escapeHtml(t.dueDate)}
+                </span>
+                ${t.emailPing ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-xdc-goldSoft text-xdc-royal border border-xdc-gold/40">✉ Gmail Ping</span>` : ''}
+              </div>
+              <p class="text-[11px] text-slate-600 mt-1">${escapeHtml(t.notes || 'No extra notes provided.')}</p>
+            </div>
+
+            <div class="flex items-center gap-1.5 shrink-0">
+              <select
+                onchange="updateTaskPriority('${t.id}', this.value)"
+                class="px-2 py-1 rounded bg-white border border-slate-300 text-[11px] font-bold text-xdc-royal"
+                title="Change Priority"
+              >
+                ${priorities.map(p => `<option value="${p}" ${(t.priority || 'Standard') === p ? 'selected' : ''}>${p}</option>`).join('')}
+              </select>
+              <select
+                onchange="updateTaskStatus('${t.id}', this.value)"
+                class="px-2 py-1 rounded bg-white border border-slate-300 text-[11px] font-bold text-xdc-royal"
+                title="Change Status"
+              >
+                ${statuses.map(s => `<option value="${s}" ${t.status === s ? 'selected' : ''}>${s}</option>`).join('')}
+              </select>
+            </div>
+          </div>
+
+          <div class="pt-2 border-t border-slate-200/80 flex flex-wrap items-center justify-end gap-1.5">
+            <button
+              type="button"
+              onclick="startEditTask('${t.id}')"
+              class="px-2.5 py-1 rounded bg-white border border-slate-300 text-[11px] font-bold text-xdc-royal hover:border-xdc-royal"
+            >
+              ✎ Edit
+            </button>
+            <button
+              type="button"
+              onclick="duplicateTask('${t.id}')"
+              class="px-2.5 py-1 rounded bg-white border border-slate-300 text-[11px] font-bold text-slate-700 hover:border-slate-500"
+            >
+              Duplicate
+            </button>
+            <button
+              type="button"
+              onclick="rePingTask('${t.id}')"
+              class="px-2.5 py-1 rounded bg-xdc-goldSoft border border-xdc-gold/40 text-[11px] font-bold text-xdc-royal hover:bg-xdc-gold hover:text-white transition-colors"
+            >
+              ✉ Re-Ping Gmail
+            </button>
+            <button
+              type="button"
+              onclick="deleteTask('${t.id}')"
+              class="px-2.5 py-1 rounded bg-red-50 border border-red-200 text-[11px] font-bold text-red-700 hover:bg-red-100"
+            >
+              Remove
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function openOfficerAnnouncementEditorNew() {
+      switchOfficerTab('announcements');
+      resetAnnouncementForm();
+      const panel = document.getElementById('officer-admin-panel');
+      if (panel) panel.scrollIntoView({ behavior: 'smooth' });
+      const titleInput = document.getElementById('ann-title');
+      if (titleInput) titleInput.focus();
+    }
+
+    function handleSaveAnnouncement(event) {
+      event.preventDefault();
+      const editId = document.getElementById('ann-edit-id').value;
+      const title = document.getElementById('ann-title').value.trim();
+      const category = document.getElementById('ann-category').value;
+      const audience = document.getElementById('ann-audience').value;
+      const body = document.getElementById('ann-body').value.trim();
+      const pinned = document.getElementById('ann-pinned').checked;
+      const emailPing = document.getElementById('ann-email-ping').checked;
+
+      if (!title || !body) return;
+      const activeOfficer = getActiveMember();
+
+      if (editId) {
+        const existing = state.announcements.find(a => a.id === editId);
+        if (existing) {
+          existing.title = title;
+          existing.category = category;
+          existing.audience = audience;
+          existing.body = body;
+          existing.pinned = pinned;
+          existing.emailPing = emailPing;
+          recordSecurityLog(
+            'ANNOUNCEMENT_UPDATED',
+            'INFO',
+            activeOfficer.email,
+            `Officer updated announcement "${title}" (${category}).`
+          );
+          showToast(
+            emailPing
+              ? `Announcement "${title}" updated & re-broadcasted via Gmail!`
+              : `Announcement "${title}" updated.`
+          );
+        }
+      } else {
+        const nowStr = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) +
+          ' • ' +
+          new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        state.announcements.unshift({
+          id: 'a' + Date.now(),
+          title,
+          category,
+          audience,
+          body,
+          author: activeOfficer ? activeOfficer.name : 'XDC Executive Board',
+          createdAt: nowStr,
+          pinned,
+          emailPing,
+          acknowledgedBy: activeOfficer ? [activeOfficer.id] : []
+        });
+
+        recordSecurityLog(
+          'ANNOUNCEMENT_PUBLISHED',
+          'SUCCESS',
+          activeOfficer.email,
+          `Officer published announcement "${title}" to ${audience}.`
+        );
+        showToast(
+          emailPing
+            ? `Published "${title}" + Gmail Broadcast dispatched to ${audience}!`
+            : `Published announcement "${title}".`
+        );
+      }
+
+      resetAnnouncementForm();
+      renderAll();
+    }
+
+    function startEditAnnouncement(annId) {
+      const a = state.announcements.find(x => x.id === annId);
+      if (!a) return;
+      switchOfficerTab('announcements');
+
+      document.getElementById('ann-edit-id').value = a.id;
+      document.getElementById('ann-title').value = a.title;
+      document.getElementById('ann-category').value = a.category;
+      document.getElementById('ann-audience').value = a.audience;
+      document.getElementById('ann-body').value = a.body;
+      document.getElementById('ann-pinned').checked = Boolean(a.pinned);
+      document.getElementById('ann-email-ping').checked = Boolean(a.emailPing);
+
+      document.getElementById('ann-form-heading').textContent = 'Edit Announcement';
+      document.getElementById('ann-submit-btn').textContent = 'Save Announcement Changes';
+      document.getElementById('ann-cancel-edit-btn').classList.remove('hidden');
+
+      const formEl = document.getElementById('officer-announcement-form');
+      if (formEl) formEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      showToast(`Editing announcement: "${a.title}"`);
+    }
+
+    function resetAnnouncementForm() {
+      const editId = document.getElementById('ann-edit-id');
+      if (!editId) return;
+      editId.value = '';
+      document.getElementById('ann-title').value = '';
+      document.getElementById('ann-category').value = 'Urgent Directive';
+      document.getElementById('ann-audience').value = 'All Members';
+      document.getElementById('ann-body').value = '';
+      document.getElementById('ann-pinned').checked = false;
+      document.getElementById('ann-email-ping').checked = true;
+
+      document.getElementById('ann-form-heading').textContent = 'Publish New Announcement';
+      document.getElementById('ann-submit-btn').textContent = 'Publish Announcement';
+      document.getElementById('ann-cancel-edit-btn').classList.add('hidden');
+    }
+
+    function togglePinAnnouncement(annId) {
+      const a = state.announcements.find(x => x.id === annId);
+      if (!a) return;
+      a.pinned = !a.pinned;
+      renderAll();
+      showToast(a.pinned ? `Pinned "${a.title}" to top of board.` : `Unpinned "${a.title}".`);
+    }
+
+    function toggleAcknowledgeAnnouncement(annId) {
+      const a = state.announcements.find(x => x.id === annId);
+      const m = getActiveMember();
+      if (!a || !m) return;
+      if (!Array.isArray(a.acknowledgedBy)) a.acknowledgedBy = [];
+      const idx = a.acknowledgedBy.indexOf(m.id);
+      if (idx >= 0) {
+        a.acknowledgedBy.splice(idx, 1);
+      } else {
+        a.acknowledgedBy.push(m.id);
+        showToast(`Acknowledged directive: "${a.title}"`);
+      }
+      renderAll();
+    }
+
+    function duplicateAnnouncement(annId) {
+      const orig = state.announcements.find(x => x.id === annId);
+      if (!orig) return;
+      state.announcements.unshift({
+        ...orig,
+        id: 'a' + Date.now(),
+        title: `${orig.title} (Copy)`,
+        acknowledgedBy: [...(orig.acknowledgedBy || [])]
+      });
+      renderAll();
+      showToast(`Duplicated announcement "${orig.title}".`);
+    }
+
+    function rePingAnnouncement(annId) {
+      const a = state.announcements.find(x => x.id === annId);
+      if (!a) return;
+      a.emailPing = true;
+      recordSecurityLog(
+        'ANNOUNCEMENT_GMAIL_BROADCAST',
+        'INFO',
+        getActiveMember().email,
+        `Officer triggered Gmail broadcast for announcement "${a.title}" to ${a.audience}.`
+      );
+      renderAll();
+      showAuthNotification({
+        title: 'Gmail Broadcast Sent',
+        subtitle: a.title,
+        detail: `Dispatched directive to ${a.audience}.`,
+        variant: 'info'
+      });
+    }
+
+    function deleteAnnouncement(annId) {
+      const target = state.announcements.find(a => a.id === annId);
+      state.announcements = state.announcements.filter(a => a.id !== annId);
+      if (document.getElementById('ann-edit-id')?.value === annId) {
+        resetAnnouncementForm();
+      }
+      if (target) {
+        recordSecurityLog(
+          'ANNOUNCEMENT_REMOVED',
+          'WARNING',
+          getActiveMember().email,
+          `Officer removed announcement "${target.title}".`
+        );
+      }
+      renderAll();
+      showToast('Announcement removed.');
+    }
+
+    function clearUnpinnedAnnouncements() {
+      const before = state.announcements.length;
+      state.announcements = state.announcements.filter(a => a.pinned);
+      const removed = before - state.announcements.length;
+      renderAll();
+      showToast(removed > 0 ? `Removed ${removed} unpinned announcement(s).` : 'No unpinned announcements to remove.');
+    }
+
+    function renderOfficerAnnouncementsList() {
+      const list = document.getElementById('officer-all-announcements-list');
+      const countEl = document.getElementById('officer-total-ann-count');
+      if (countEl) countEl.textContent = String(state.announcements.length);
+      if (!list) return;
+
+      const searchVal = (document.getElementById('officer-ann-search')?.value || '').trim().toLowerCase();
+      const catFilter = document.getElementById('officer-ann-category-filter')?.value || 'All';
+
+      const filtered = [...state.announcements]
+        .filter(a => {
+          const matchesCat = catFilter === 'All' || a.category === catFilter;
+          const hay = `${a.title} ${a.body} ${a.author} ${a.audience} ${a.category}`.toLowerCase();
+          const matchesSearch = !searchVal || hay.includes(searchVal);
+          return matchesCat && matchesSearch;
+        })
+        .sort((a, b) => Number(Boolean(b.pinned)) - Number(Boolean(a.pinned)));
+
+      if (filtered.length === 0) {
+        list.innerHTML = `
+          <div class="p-6 rounded-xl bg-xdc-slateBg border border-slate-200 text-center text-xs text-slate-500">
+            No announcements match this filter.
+          </div>
+        `;
+        return;
+      }
+
+      list.innerHTML = filtered.map(a => `
+        <div class="p-4 rounded-xl ${a.pinned ? 'bg-xdc-goldSoft/60 border-2 border-xdc-gold/60' : 'bg-xdc-slateBg border border-slate-200'} space-y-2">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex flex-wrap items-center gap-1.5">
+              ${a.pinned ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-xdc-gold text-white">📌 Pinned</span>` : ''}
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-xdc-royal text-white">${escapeHtml(a.category)}</span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-white border border-slate-200 text-xdc-royal">${escapeHtml(a.audience)}</span>
+              <span class="text-[11px] text-slate-500 font-bold">✓ ${(a.acknowledgedBy || []).length} Read</span>
+            </div>
+            <span class="text-[10px] text-slate-500">${escapeHtml(a.createdAt)}</span>
+          </div>
+
+          <div class="text-xs font-bold text-xdc-royal">${escapeHtml(a.title)}</div>
+          <p class="text-[11px] text-slate-600 leading-relaxed">${escapeHtml(a.body)}</p>
+
+          <div class="pt-2 border-t border-slate-200/80 flex flex-wrap items-center justify-between gap-2">
+            <span class="text-[10px] text-slate-500 font-bold">By ${escapeHtml(a.author)}</span>
+            <div class="flex flex-wrap items-center gap-1.5">
+              <button
+                type="button"
+                onclick="startEditAnnouncement('${a.id}')"
+                class="px-2.5 py-1 rounded bg-white border border-slate-300 text-[11px] font-bold text-xdc-royal hover:border-xdc-royal"
+              >
+                ✎ Edit
+              </button>
+              <button
+                type="button"
+                onclick="togglePinAnnouncement('${a.id}')"
+                class="px-2.5 py-1 rounded bg-white border border-slate-300 text-[11px] font-bold text-xdc-gold hover:border-xdc-gold"
+              >
+                ${a.pinned ? 'Unpin' : '📌 Pin'}
+              </button>
+              <button
+                type="button"
+                onclick="duplicateAnnouncement('${a.id}')"
+                class="px-2.5 py-1 rounded bg-white border border-slate-300 text-[11px] font-bold text-slate-700 hover:border-slate-500"
+              >
+                Duplicate
+              </button>
+              <button
+                type="button"
+                onclick="rePingAnnouncement('${a.id}')"
+                class="px-2.5 py-1 rounded bg-xdc-goldSoft border border-xdc-gold/40 text-[11px] font-bold text-xdc-royal hover:bg-xdc-gold hover:text-white transition-colors"
+              >
+                ✉ Re-Ping
+              </button>
+              <button
+                type="button"
+                onclick="deleteAnnouncement('${a.id}')"
+                class="px-2.5 py-1 rounded bg-red-50 border border-red-200 text-[11px] font-bold text-red-700 hover:bg-red-100"
+              >
+                Remove
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function handleSaveMemberAccount(event) {
+      event.preventDefault();
+      const editId = document.getElementById('member-edit-id').value;
+      const name = document.getElementById('new-member-name').value.trim();
+      const email = document.getElementById('new-member-email').value.trim();
+      const password = document.getElementById('new-member-password').value.trim();
+      const roleTitle = document.getElementById('new-member-role').value.trim();
+      const committee = document.getElementById('new-member-committee').value;
+      const isOfficer = document.getElementById('new-member-isofficer').checked;
+
+      if (!name || !email || !password) {
+        showToast('Please complete Full Name, @gmail.com address, and Password.');
+        return;
+      }
+
+      if (!STRICT_GMAIL_REGEX.test(email)) {
+        recordSecurityLog(
+          'DIRECTORY_NON_GMAIL_BLOCKED',
+          'WARNING',
+          email,
+          `Blocked registration/update of non-Gmail address "${email}".`
+        );
+        showAuthNotification({
+          title: 'Registration Blocked',
+          subtitle: 'Strict @gmail.com Required',
+          detail: 'All XDC member accounts must use a valid @gmail.com address.',
+          variant: 'error'
+        });
+        return;
+      }
+
+      if (
+        state.members.some(
+          m => m.id !== editId && m.email.toLowerCase() === email.toLowerCase()
+        )
+      ) {
+        showAuthNotification({
+          title: 'Duplicate Gmail',
+          subtitle: 'Account Already Exists',
+          detail: `${email} is already registered to another member.`,
+          variant: 'error'
+        });
+        return;
+      }
+
+      if (editId) {
+        const existing = state.members.find(m => m.id === editId);
+        if (existing) {
+          existing.name = name;
+          existing.email = email;
+          existing.password = password;
+          existing.committee = committee;
+          if (!existing.isCoderRoot) {
+            existing.isOfficer = isOfficer;
+          }
+          existing.role = roleTitle || (existing.isOfficer ? 'XDC Officer • Varsity Debater' : 'Varsity Debater');
+          showToast(`Updated member profile for ${name}.`);
+        }
+      } else {
+        state.members.push({
+          id: 'm' + Date.now(),
+          name,
+          email,
+          password,
+          isCoderRoot: false,
+          isOfficer,
+          role: roleTitle || (isOfficer ? 'XDC Officer • Varsity Debater' : 'Varsity Debater'),
+          committee,
+          status: 'Active',
+          sparsDone: 0,
+          sparsReq: 8,
+          trainingDone: 0,
+          trainingReq: 6,
+          tournamentsDone: 0,
+          tournamentsReq: 2
+        });
+
+        recordSecurityLog(
+          'GMAIL_ACCOUNT_CREATED',
+          'SUCCESS',
+          email,
+          `Registered new member ${name} (${email}) with ${isOfficer ? 'Officer' : 'Member'} access.`
+        );
+        showToast(`Registered Gmail account for ${name} (${email})`);
+      }
+
+      resetMemberForm();
+      populateTaskTargetDropdown();
+      renderAll();
+    }
+
+    function startEditMember(memberId) {
+      const m = state.members.find(x => x.id === memberId);
+      if (!m) return;
+      switchOfficerTab('directory');
+
+      document.getElementById('member-edit-id').value = m.id;
+      document.getElementById('new-member-name').value = m.name;
+      document.getElementById('new-member-email').value = m.email;
+      document.getElementById('new-member-password').value = m.password;
+      document.getElementById('new-member-role').value = m.role;
+      document.getElementById('new-member-committee').value = m.committee;
+      document.getElementById('new-member-isofficer').checked = Boolean(m.isOfficer);
+      document.getElementById('new-member-isofficer').disabled = Boolean(m.isCoderRoot);
+
+      document.getElementById('member-form-heading').textContent = `Editing Member: ${m.name}`;
+      document.getElementById('member-submit-btn').textContent = 'Save Member';
+      document.getElementById('member-cancel-edit-btn').classList.remove('hidden');
+      showToast(`Editing member profile: ${m.name}`);
+    }
+
+    function resetMemberForm() {
+      const editId = document.getElementById('member-edit-id');
+      if (!editId) return;
+      editId.value = '';
+      document.getElementById('new-member-name').value = '';
+      document.getElementById('new-member-email').value = '';
+      document.getElementById('new-member-password').value = '';
+      document.getElementById('new-member-role').value = '';
+      document.getElementById('new-member-isofficer').checked = false;
+      document.getElementById('new-member-isofficer').disabled = false;
+
+      document.getElementById('member-form-heading').textContent = 'Register New Member (Strict @gmail.com Required)';
+      document.getElementById('member-submit-btn').textContent = '+ Register';
+      document.getElementById('member-cancel-edit-btn').classList.add('hidden');
+    }
+
+    function removeMemberAccount(memberId) {
+      const m = state.members.find(x => x.id === memberId);
+      if (!m) return;
+      if (m.isCoderRoot) {
+        showToast('Cannot remove the Coder Root account.');
+        return;
+      }
+      state.members = state.members.filter(x => x.id !== memberId);
+      if (state.activeMemberId === memberId) {
+        state.activeMemberId = state.members[0].id;
+      }
+      populateTaskTargetDropdown();
+      renderAll();
+      showToast(`Removed member ${m.name}.`);
+    }
+
+    function renderOfficerDirectory() {
+      const tbody = document.getElementById('officer-directory-tbody');
+      const searchInput = document.getElementById('directory-search-input');
+      if (!tbody) return;
+
+      const query = (searchInput ? searchInput.value : '').trim().toLowerCase();
+      const committees = [
+        'Training & Education',
+        'Adjudication & Tabulation',
+        'Tournament & Externals',
+        'Finance & Logistics',
+        'Publicity & Research',
+        'External Ministry'
+      ];
+      const statuses = ['Active', 'Probationary', 'On Leave', 'Alumni'];
+
+      const filtered = state.members.filter(m =>
+        !query ||
+        m.name.toLowerCase().includes(query) ||
+        m.email.toLowerCase().includes(query) ||
+        m.committee.toLowerCase().includes(query) ||
+        m.status.toLowerCase().includes(query)
+      );
+
+      tbody.innerHTML = filtered.map(m => `
+        <tr class="hover:bg-slate-50">
+          <td class="py-3 px-4">
+            <div class="flex items-center gap-1.5">
+              <span class="font-bold text-xdc-royal">${escapeHtml(m.name)}</span>
+              ${m.isCoderRoot ? '<span class="px-1.5 py-0.5 rounded bg-xdc-gold text-white text-[9px] font-bold">CODER ROOT</span>' : ''}
+            </div>
+            <div class="text-[11px] text-slate-500">${escapeHtml(m.role)}</div>
+            <div class="text-[11px] text-emerald-700 font-bold mt-0.5">
+              ✉ ${escapeHtml(m.email)}
+            </div>
+          </td>
+          <td class="py-3 px-4">
+            <select
+              onchange="updateMemberField('${m.id}', 'committee', this.value)"
+              class="px-2.5 py-1 rounded bg-white border border-slate-300 text-xs font-bold text-xdc-royal"
+            >
+              ${committees.map(c => `<option value="${c}" ${m.committee === c ? 'selected' : ''}>${c}</option>`).join('')}
+            </select>
+          </td>
+          <td class="py-3 px-4">
+            <div class="flex flex-col gap-1.5">
+              <select
+                onchange="updateMemberField('${m.id}', 'status', this.value)"
+                class="px-2.5 py-1 rounded bg-white border border-slate-300 text-xs font-bold text-slate-800"
+              >
+                ${statuses.map(s => `<option value="${s}" ${m.status === s ? 'selected' : ''}>${s}</option>`).join('')}
+              </select>
+              <label class="inline-flex items-center gap-1.5 text-[11px] font-bold text-xdc-royal cursor-pointer">
+                <input
+                  type="checkbox"
+                  ${m.isOfficer ? 'checked' : ''}
+                  ${m.isCoderRoot ? 'disabled' : ''}
+                  onchange="updateMemberField('${m.id}', 'isOfficer', this.checked)"
+                />
+                <span>Officer Access</span>
+              </label>
+            </div>
+          </td>
+          <td class="py-3 px-4 text-center">
+            <div class="inline-flex items-center gap-1">
+              <button type="button" onclick="adjustMemberQuota('${m.id}', 'sparsDone', -1)" class="w-6 h-6 rounded bg-slate-200 hover:bg-slate-300 font-bold">-</button>
+              <span class="w-10 text-center font-bold">${m.sparsDone}/${m.sparsReq}</span>
+              <button type="button" onclick="adjustMemberQuota('${m.id}', 'sparsDone', 1)" class="w-6 h-6 rounded bg-xdc-royal text-white font-bold">+</button>
+            </div>
+          </td>
+          <td class="py-3 px-4 text-center">
+            <div class="inline-flex items-center gap-1">
+              <button type="button" onclick="adjustMemberQuota('${m.id}', 'trainingDone', -1)" class="w-6 h-6 rounded bg-slate-200 hover:bg-slate-300 font-bold">-</button>
+              <span class="w-10 text-center font-bold">${m.trainingDone}/${m.trainingReq}</span>
+              <button type="button" onclick="adjustMemberQuota('${m.id}', 'trainingDone', 1)" class="w-6 h-6 rounded bg-xdc-royal text-white font-bold">+</button>
+            </div>
+          </td>
+          <td class="py-3 px-4 text-center">
+            <div class="inline-flex items-center gap-1">
+              <button type="button" onclick="adjustMemberQuota('${m.id}', 'tournamentsDone', -1)" class="w-6 h-6 rounded bg-slate-200 hover:bg-slate-300 font-bold">-</button>
+              <span class="w-10 text-center font-bold">${m.tournamentsDone}/${m.tournamentsReq}</span>
+              <button type="button" onclick="adjustMemberQuota('${m.id}', 'tournamentsDone', 1)" class="w-6 h-6 rounded bg-xdc-royal text-white font-bold">+</button>
+            </div>
+          </td>
+          <td class="py-3 px-4 text-right">
+            <div class="inline-flex items-center gap-1.5">
+              <button
+                type="button"
+                onclick="startEditMember('${m.id}')"
+                class="px-2 py-1 rounded bg-white border border-slate-300 text-[11px] font-bold text-xdc-royal hover:border-xdc-royal"
+              >
+                Edit
+              </button>
+              ${
+                !m.isCoderRoot
+                  ? `<button
+                      type="button"
+                      onclick="removeMemberAccount('${m.id}')"
+                      class="px-2 py-1 rounded bg-red-50 border border-red-200 text-[11px] font-bold text-red-700 hover:bg-red-100"
+                    >
+                      Remove
+                    </button>`
+                  : ''
+              }
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function updateMemberField(memberId, field, value) {
+      const m = state.members.find(x => x.id === memberId);
+      if (!m) return;
+      if (m.isCoderRoot && field === 'isOfficer') return;
+      m[field] = value;
+      populateMemberSelectors();
+      renderAll();
+      showToast(`Updated ${m.name}'s ${field}`);
+    }
+
+    function adjustMemberQuota(memberId, field, delta) {
+      const m = state.members.find(x => x.id === memberId);
+      if (!m) return;
+      m[field] = Math.max(0, m[field] + delta);
+      renderAll();
+    }
+
+    function handleSaveEvent(event) {
+      event.preventDefault();
+      const editId = document.getElementById('event-edit-id').value;
+      const title = document.getElementById('event-title-input').value.trim();
+      const type = document.getElementById('event-type-input').value;
+      const date = document.getElementById('event-date-input').value.trim();
+      const location = document.getElementById('event-loc-input').value.trim();
+
+      if (!title || !date || !location) return;
+
+      if (editId) {
+        const existing = state.events.find(e => e.id === editId);
+        if (existing) {
+          existing.title = title;
+          existing.type = type;
+          existing.date = date;
+          existing.location = location;
+          showToast('Event updated.');
+        }
+      } else {
+        state.events.push({
+          id: 'e' + Date.now(),
+          title,
+          type,
+          date,
+          location,
+          rsvpMemberIds: ['m1']
+        });
+        showToast('New event published to Upcoming Events Board.');
+      }
+
+      resetEventForm();
+      renderAll();
+    }
+
+    function editEvent(eventId) {
+      const ev = state.events.find(e => e.id === eventId);
+      if (!ev) return;
+      document.getElementById('event-edit-id').value = ev.id;
+      document.getElementById('event-title-input').value = ev.title;
+      document.getElementById('event-type-input').value = ev.type;
+      document.getElementById('event-date-input').value = ev.date;
+      document.getElementById('event-loc-input').value = ev.location;
+      document.getElementById('event-form-label').textContent = 'Editing Event';
+      document.getElementById('event-cancel-btn').classList.remove('hidden');
+    }
+
+    function resetEventForm() {
+      document.getElementById('event-edit-id').value = '';
+      document.getElementById('event-title-input').value = '';
+      document.getElementById('event-date-input').value = '';
+      document.getElementById('event-loc-input').value = '';
+      document.getElementById('event-form-label').textContent = 'Add Upcoming Event';
+      document.getElementById('event-cancel-btn').classList.add('hidden');
+    }
+
+    function deleteEvent(eventId) {
+      state.events = state.events.filter(e => e.id !== eventId);
+      renderAll();
+      showToast('Event deleted.');
+    }
+
+    function renderOfficerEditorLists() {
+      const evList = document.getElementById('officer-events-list');
+      if (evList) {
+        evList.innerHTML = state.events.map(ev => `
+          <div class="p-3 rounded-lg bg-white border border-slate-200 flex items-center justify-between gap-2 text-xs">
+            <div>
+              <strong class="text-xdc-royal">[${escapeHtml(ev.type)}] ${escapeHtml(ev.title)}</strong>
+              <div class="text-[11px] text-slate-500">${escapeHtml(ev.date)} • ${escapeHtml(ev.location)}</div>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+              <button type="button" onclick="editEvent('${ev.id}')" class="text-xdc-royal font-bold hover:underline">Edit</button>
+              <button type="button" onclick="deleteEvent('${ev.id}')" class="text-red-600 font-bold hover:underline">Delete</button>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      const countEl = document.getElementById('locked-hof-count');
+      if (countEl) countEl.textContent = String(HALL_OF_FAME_DATA.length);
+
+      const readonlyHofList = document.getElementById('officer-readonly-hof-list');
+      if (readonlyHofList) {
+        readonlyHofList.innerHTML = HALL_OF_FAME_DATA.map(h => `
+          <div class="p-2.5 rounded-lg bg-white border border-slate-200 flex items-center justify-between gap-2 text-xs">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <img src="${escapeHtml(h.photo)}" alt="" class="w-8 h-8 rounded object-cover border border-slate-200 shrink-0" />
+              <div class="truncate">
+                <strong class="text-xdc-royal block truncate">${escapeHtml(h.tournament)} (${escapeHtml(h.year)})</strong>
+                <span class="text-[10px] text-slate-500">${escapeHtml((h.tags || []).join(' • '))}</span>
+              </div>
+            </div>
+            <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-600 font-bold text-[10px] shrink-0">
+              🔒 Source-Locked
+            </span>
+          </div>
+        `).join('');
+      }
+    }
+
+    function renderAll() {
+      renderLogos();
+      populateMemberSelectors();
+      renderHallOfFame();
+      renderMemberDashboard();
+      renderOfficerTasksList();
+      renderOfficerAnnouncementsList();
+      renderOfficerDirectory();
+      renderOfficerEditorLists();
+      renderCoderSecurityConsole();
+    }
+
+    window.addEventListener('scroll', updateScrollParallaxCrest, { passive: true });
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      updateSecurityAttemptsUI();
+      populateTaskTargetDropdown();
+      switchOfficerTab('allocator');
+      await issueEncryptedSessionToken(getActiveMember(), 'public');
+      await switchRole('public');
+      updateScrollParallaxCrest();
+
+      // Active session inactivity countdown ticker
+      setInterval(() => {
+        if (state.role !== 'public') {
+          state.sessionSecondsRemaining = Math.max(0, state.sessionSecondsRemaining - 1);
+          updateSessionTimerUI();
+          if (state.sessionSecondsRemaining === 0) {
+            recordSecurityLog(
+              'SESSION_TTL_EXPIRED',
+              'INFO',
+              getActiveMember().email,
+              '15-minute inactivity timeout reached; session token automatically revoked.'
+            );
+            handleSignOut();
+          }
+        }
+      }, 1000);
+    });
+  </script>
+</body>
+</html>
